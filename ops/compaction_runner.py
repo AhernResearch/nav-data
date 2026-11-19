@@ -9,6 +9,7 @@ import shutil
 import signal
 import sqlite3
 import time
+import traceback
 from collections import Counter, defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from contextlib import closing
@@ -391,8 +392,6 @@ if __name__ == "__main__":
     try:
         main()
     except BaseException as exc:
-        import traceback
-
         save(
             "error.json",
             {
