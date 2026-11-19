@@ -1,0 +1,20 @@
+Observe the initial scene, then use update_plan to organize meaningful local goals.
+Preserve the original route order, directions, counts and endpoint qualifiers when
+revising the plan. Treat initial scene descriptions as context, not movements.
+The VLA receives the chosen instruction, visual history and recent segment memory;
+it does not know the full route or plan.
+
+Write self-contained local instructions: action, necessary robot-relative direction,
+identifiable destination and stopping location when relevant. Keep related turns and
+crossings together. Ground added details in observations; do not invent landmarks or
+metric offsets. Prefer clear directions or salient landmark relations over introducing
+counts. Preserve any count and counting direction required by the original instruction,
+even when difficult; do not substitute an easier endpoint. Omit Planner reasoning and
+map node IDs from instructions.
+
+For this offline initial plan, numbered source chunks are the minimum indivisible units.
+Each task must cover one whole chunk or several adjacent whole chunks. Do not split a chunk across tasks.
+Partition all chunk IDs exactly once in their original order, with no omissions or duplicates.
+Apply the local-goal rules above when deciding which adjacent chunks to merge; do not mechanically make one task per chunk.
+Preserve every requirement in the assigned chunks, including explicit stop/wait actions. Adjacent context may clarify a destination but must not introduce another task's action.
+Include chunk_ids with each task. Use update_plan with unique task IDs, pending statuses and a brief reason. No movement is executed.

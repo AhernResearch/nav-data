@@ -1,0 +1,10 @@
+{
+  "planning_rule_source": "AGENTIC_SYSTEM_PROMPT: planning and local instruction paragraphs copied verbatim; execution rules excluded",
+  "source_sha256": {
+    "/home/holo/robots/open-nav-harness-tools/navgpt/planner/prompts.py": "fc754db3b3b0a66d2071f7d304de92375a4a747f8f55631b8c6f1e1fd05ce4f3",
+    "annotations/planner_chunks/prompts/plan.whole-chunks.v1.txt": "7ce076ae22d61350b28caba223585ce0d22f0ac0234aca10274825db1ccba4d8",
+    "annotations/planner_chunks/fixtures/cases.whole-chunks.v1.json": "79e86b5fbb46ed1e7f998784ee204618051c458d432e3d3195a4bdf2c597181b",
+    "annotations/planner_chunks/protocol.whole-chunks.v1.json": "cc173ecedf9f6fb9a5c01ae4b7de84127365f2f7fef311737f18e00864ce2f3e",
+    "annotations/planner_chunks/fixtures/cases.plan-v2.json": "12fbec8d561d0f66cfc81e63aeda65c4b986188b8c860cf962c9ae87ad3cbba3"
+  }
+}

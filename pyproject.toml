@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nav-data"
+version = "0.1.0"
+description = "Navigation expert-data production: collection, compaction and frozen releases"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26,<3", "pillow>=12,<13", "jsonschema>=4.18,<5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "ruff>=0.14,<1"]
+
+[project.scripts]
+nav-data = "nav_data.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+nav_data = ["configs/**/*", "prompts/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 105
+
+[tool.ruff.lint]
+select = ["E4", "E9", "F", "I"]
+# Imported collection code uses compact one-line statements; E7 would only reformat it.

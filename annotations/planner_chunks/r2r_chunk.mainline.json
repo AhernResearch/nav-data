@@ -1,0 +1,125 @@
+{
+  "split": "train",
+  "source_collection": "/data/nav_storage/open-nav-harness-tools/state/pilots/lightnav-pilot-900ad14c8cad",
+  "source_review": "/data/nav_storage/open-nav-harness-tools/state/reviews/lightnav-pilot-review-479ba85a4bf8",
+  "base_request": "/data/nav_storage/open-nav-harness-tools/state/research/lightnav-short-augmentation-84ec4990b126/base_request.json",
+  "snapshot_root": "/data/nav_storage/open-nav-harness-tools/state/research/lightnav-short-augmentation-84ec4990b126/snapshot",
+  "max_tasks": 60000,
+  "max_candidates": 240000,
+  "draws_per_mode": 2,
+  "short_distance_m": 1.0,
+  "start_radius_m": 0.5,
+  "yaw_degrees": 45.0,
+  "seed": 20261115,
+  "max_steps": 400,
+  "ready_queue_size": 64,
+  "candidate_timeout_s": 600,
+  "request_timeout_s": 180,
+  "simulation_workers": [
+    {
+      "id": "sim-0",
+      "gpu": 0
+    },
+    {
+      "id": "sim-1",
+      "gpu": 2
+    },
+    {
+      "id": "sim-2",
+      "gpu": 3
+    },
+    {
+      "id": "sim-3",
+      "gpu": 4
+    },
+    {
+      "id": "sim-4",
+      "gpu": 0
+    },
+    {
+      "id": "sim-5",
+      "gpu": 2
+    },
+    {
+      "id": "sim-6",
+      "gpu": 3
+    },
+    {
+      "id": "sim-7",
+      "gpu": 4
+    },
+    {
+      "id": "sim-8",
+      "gpu": 0
+    },
+    {
+      "id": "sim-9",
+      "gpu": 2
+    },
+    {
+      "id": "sim-10",
+      "gpu": 3
+    },
+    {
+      "id": "sim-11",
+      "gpu": 4
+    },
+    {
+      "id": "sim-12",
+      "gpu": 0
+    },
+    {
+      "id": "sim-13",
+      "gpu": 2
+    },
+    {
+      "id": "sim-14",
+      "gpu": 3
+    },
+    {
+      "id": "sim-15",
+      "gpu": 4
+    }
+  ],
+  "model_profiles": [
+    {
+      "id": "fp4-0",
+      "endpoint": "http://127.0.0.1:18110/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    },
+    {
+      "id": "fp4-1",
+      "endpoint": "http://127.0.0.1:18111/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    },
+    {
+      "id": "fp4-2",
+      "endpoint": "http://127.0.0.1:18112/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    },
+    {
+      "id": "fp4-3",
+      "endpoint": "http://127.0.0.1:18113/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    }
+  ],
+  "pose_sampling_attempts": 32,
+  "guide_adjustment_radius_m": 0.25,
+  "minimum_free_disk_bytes": 107374182400,
+  "minimum_planning_clearance_m": 0.05,
+  "endpoint_adjustment_radius_m": 0.15,
+  "expert_goal_radius_m": 0.08,
+  "goal_tolerance_m": 0.3,
+  "collection_service": {
+    "url": "http://127.0.0.1:18812",
+    "shared_root": "/data/nav_storage/sim-engine/collections/train-v1",
+    "dataset": "train_pilot",
+    "camera": "visible_88cm_hfov120",
+    "max_pending": 64,
+    "poll_interval_s": 0.1
+  }
+}

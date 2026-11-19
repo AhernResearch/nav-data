@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "alignment_prompt": "Offline annotation stage. Your previously generated plan is now frozen. Do not rewrite, split, merge, reorder, or replace its tasks. Associate each existing task with the source instruction chunks below. Use task_id only; executable instructions remain exactly the frozen strings.\nSelect contiguous chunk IDs whose semantics support each task. You may combine adjacent chunks. Do NOT require a one-to-one partition: different tasks may cover different parts of one chunk or share an endpoint. Distinguish actual action coverage from a chunk used only to resolve a destination or pronoun. For example, reaching the bottom as the endpoint of descending stairs need not imply a separate stop or wait action. Conversely, approaching stairs does not mean descending them.\nFor each selected chunk state full_action, partial_action, endpoint_context, or reference_context. full_chunk_interval_reusable is true only if the task matches the complete action scope of the selected interval, without added or omitted required actions. If only part of a chunk is covered, or geometric boundary correspondence cannot be determined from text, say so: never invent a frame index, pose, distance, or reference path. Identify model-added details separately; their presence may be supported by observation but does not establish reference-boundary correspondence. Return needs_review and an explanation. Empty chunk_ids is permitted when no supporting chunk exists. Account for every frozen task once, and list source chunks whose required actions are not covered by the whole plan. Use record_chunk_alignment only. This is annotation; no movement or other tools will execute.\nNumbered source chunks:\n",
+  "alignment_tool": {
+    "type": "function",
+    "function": {
+      "name": "record_chunk_alignment",
+      "description": "Record semantic alignment to the already frozen plan. Does not modify or execute it.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "alignments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "task_id": {
+                  "type": "integer"
+                },
+                "chunk_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "coverage": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "chunk_id": {
+                        "type": "integer"
+                      },
+                      "relation": {
+                        "type": "string",
+                        "enum": [
+                          "full_action",
+                          "partial_action",
+                          "endpoint_context",
+                          "reference_context"
+                        ]
+                      },
+                      "explanation": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "chunk_id",
+                      "relation",
+                      "explanation"
+                    ]
+                  }
+                },
+                "full_chunk_interval_reusable": {
+                  "type": "boolean"
+                },
+                "added_details": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "needs_review": {
+                  "type": "boolean"
+                },
+                "explanation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id",
+                "chunk_ids",
+                "coverage",
+                "full_chunk_interval_reusable",
+                "added_details",
+                "needs_review",
+                "explanation"
+              ]
+            }
+          },
+          "uncovered_action_chunk_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "overall_note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alignments",
+          "uncovered_action_chunk_ids",
+          "overall_note"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,691 @@
+[
+  {
+    "id": "1",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "go around the right side of the center unit",
+      "and stop by the right side doorway with the dining table and mirror in it"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Observe the initial scene, then use update_plan to organize meaningful local goals.\nPreserve the original route order, directions, counts and endpoint qualifiers when\nrevising the plan. Treat initial scene descriptions as context, not movements.\nThe VLA receives the chosen instruction, visual history and recent segment memory;\nit does not know the full route or plan.\n\nWrite self-contained local instructions: action, necessary robot-relative direction,\nidentifiable destination and stopping location when relevant. Keep related turns and\ncrossings together. Ground added details in observations; do not invent landmarks or\nmetric offsets. Prefer clear directions or salient landmark relations over introducing\ncounts. Preserve any count and counting direction required by the original instruction,\neven when difficult; do not substitute an easier endpoint. Omit Planner reasoning and\nmap node IDs from instructions.\n\nFor this offline initial plan, numbered source chunks are the minimum indivisible units.\nEach task must cover one whole chunk or several adjacent whole chunks. Do not split a chunk across tasks.\nPartition all chunk IDs exactly once in their original order, with no omissions or duplicates.\nApply the local-goal rules above when deciding which adjacent chunks to merge; do not mechanically make one task per chunk.\nPreserve every requirement in the assigned chunks, including explicit stop/wait actions. Adjacent context may clarify a destination but must not introduce another task's action.\nInclude chunk_ids with each task. Use update_plan with unique task IDs, pending statuses and a brief reason. No movement is executed."
+        },
+        {
+          "role": "user",
+          "content": "Original instruction:\nGo around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \n\nInitial observation metadata:\n{\"orientation\": [-0.7071067690849304, -0.0, 0.7071067690849304, -0.0], \"missing_views\": []}\nahead — clearance 4.97 m\nright (+90 deg right) — clearance 0.62 m\nbehind (180 deg) — clearance 0.61 m\nleft (+90 deg left) — clearance 4.22 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Initial observation: ahead — clearance 4.97 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "be4e520c30c7707e540388375e231971db162a298c018587a08d11cf492df6e2",
+                  "mime_type": "image/png",
+                  "bytes": 102339
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: right (+90 deg right) — clearance 0.62 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "c4037f4217df8017a6106fa68d9f07d341d21ec27432e56e0a49dbfdde9fcc2a",
+                  "mime_type": "image/png",
+                  "bytes": 103410
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: behind (180 deg) — clearance 0.61 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "50f0bf533674308f09ea2ba4dc91c8db1b3abe7d1adadd1276adaae92bca87da",
+                  "mime_type": "image/png",
+                  "bytes": 79052
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: left (+90 deg left) — clearance 4.22 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "9b7022d1cbd9c6fa93f2d55c5b5147df164514bb24e1eb6f72289a99d94bd6eb",
+                  "mime_type": "image/png",
+                  "bytes": 105408
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Numbered source chunks:\n[{\"chunk_id\": 0, \"text\": \"go around the right side of the center unit\"}, {\"chunk_id\": 1, \"text\": \"and stop by the right side doorway with the dining table and mirror in it\"}]"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Record an initial ordered navigation plan; does not execute movement.",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "chunk_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status",
+                    "chunk_ids"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "prompt_version": "plan.whole-chunks.v1",
+    "plan_constraint": "whole_chunks"
+  },
+  {
+    "id": "457",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "walk out of the bathroom",
+      "and through the television room into the hallway",
+      "in the hall go to the stair",
+      "and go up the stair stop on the fourth from the top stair"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Observe the initial scene, then use update_plan to organize meaningful local goals.\nPreserve the original route order, directions, counts and endpoint qualifiers when\nrevising the plan. Treat initial scene descriptions as context, not movements.\nThe VLA receives the chosen instruction, visual history and recent segment memory;\nit does not know the full route or plan.\n\nWrite self-contained local instructions: action, necessary robot-relative direction,\nidentifiable destination and stopping location when relevant. Keep related turns and\ncrossings together. Ground added details in observations; do not invent landmarks or\nmetric offsets. Prefer clear directions or salient landmark relations over introducing\ncounts. Preserve any count and counting direction required by the original instruction,\neven when difficult; do not substitute an easier endpoint. Omit Planner reasoning and\nmap node IDs from instructions.\n\nFor this offline initial plan, numbered source chunks are the minimum indivisible units.\nEach task must cover one whole chunk or several adjacent whole chunks. Do not split a chunk across tasks.\nPartition all chunk IDs exactly once in their original order, with no omissions or duplicates.\nApply the local-goal rules above when deciding which adjacent chunks to merge; do not mechanically make one task per chunk.\nPreserve every requirement in the assigned chunks, including explicit stop/wait actions. Adjacent context may clarify a destination but must not introduce another task's action.\nInclude chunk_ids with each task. Use update_plan with unique task IDs, pending statuses and a brief reason. No movement is executed."
+        },
+        {
+          "role": "user",
+          "content": "Original instruction:\nWalk out of the bathroom and through the television room into the hallway. In the hall go to the stairs and go up the stairs, stopping on the fourth from the top stair. \n\nInitial observation metadata:\n{\"orientation\": [0.7071067690849304, -0.0, 0.7071067690849304, 0.0], \"missing_views\": []}\nahead — clearance 0.43 m\nright (+90 deg right) — clearance 2.48 m\nbehind (180 deg) — clearance 1.36 m\nleft (+90 deg left) — clearance 0.42 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Initial observation: ahead — clearance 0.43 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "45045f7a75fab4f2c27dc0b6db79f9b957f6ded7e2d40b7d636b346f56f2af61",
+                  "mime_type": "image/png",
+                  "bytes": 111930
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: right (+90 deg right) — clearance 2.48 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "3184e4e4709e0fb559f393188815f757d2293a4c71ff77db1a9de12d1f019b5b",
+                  "mime_type": "image/png",
+                  "bytes": 80461
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: behind (180 deg) — clearance 1.36 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "878f8fbd485b780297605b7ae54733fd8fe0854eb40c43d9bd957001fc174274",
+                  "mime_type": "image/png",
+                  "bytes": 112561
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: left (+90 deg left) — clearance 0.42 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "98ed959b171b71d0c774438926be794cd313feeaf1c8fac282a04583b8458afd",
+                  "mime_type": "image/png",
+                  "bytes": 134574
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Numbered source chunks:\n[{\"chunk_id\": 0, \"text\": \"walk out of the bathroom\"}, {\"chunk_id\": 1, \"text\": \"and through the television room into the hallway\"}, {\"chunk_id\": 2, \"text\": \"in the hall go to the stair\"}, {\"chunk_id\": 3, \"text\": \"and go up the stair stop on the fourth from the top stair\"}]"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Record an initial ordered navigation plan; does not execute movement.",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "chunk_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status",
+                    "chunk_ids"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "prompt_version": "plan.whole-chunks.v1",
+    "plan_constraint": "whole_chunks"
+  },
+  {
+    "id": "7016",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "walk up stair",
+      "make a left on the stair landing",
+      "make a left through the open door on the left",
+      "wait at the foot of the bed"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Observe the initial scene, then use update_plan to organize meaningful local goals.\nPreserve the original route order, directions, counts and endpoint qualifiers when\nrevising the plan. Treat initial scene descriptions as context, not movements.\nThe VLA receives the chosen instruction, visual history and recent segment memory;\nit does not know the full route or plan.\n\nWrite self-contained local instructions: action, necessary robot-relative direction,\nidentifiable destination and stopping location when relevant. Keep related turns and\ncrossings together. Ground added details in observations; do not invent landmarks or\nmetric offsets. Prefer clear directions or salient landmark relations over introducing\ncounts. Preserve any count and counting direction required by the original instruction,\neven when difficult; do not substitute an easier endpoint. Omit Planner reasoning and\nmap node IDs from instructions.\n\nFor this offline initial plan, numbered source chunks are the minimum indivisible units.\nEach task must cover one whole chunk or several adjacent whole chunks. Do not split a chunk across tasks.\nPartition all chunk IDs exactly once in their original order, with no omissions or duplicates.\nApply the local-goal rules above when deciding which adjacent chunks to merge; do not mechanically make one task per chunk.\nPreserve every requirement in the assigned chunks, including explicit stop/wait actions. Adjacent context may clarify a destination but must not introduce another task's action.\nInclude chunk_ids with each task. Use update_plan with unique task IDs, pending statuses and a brief reason. No movement is executed."
+        },
+        {
+          "role": "user",
+          "content": "Original instruction:\nWalk up stairs. Make a left on the stair landing. Make a left through the open door on the left. Wait at the foot of the bed. \n\nInitial observation metadata:\n{\"orientation\": [0.8660253882408142, -0.0, 0.5, 0.0], \"missing_views\": []}\nahead — clearance 0.41 m\nright (+90 deg right) — clearance 1.34 m\nbehind (180 deg) — clearance 0.45 m\nleft (+90 deg left) — clearance 3.19 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Initial observation: ahead — clearance 0.41 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "9be0b1bb2d81d794b40e4f76a4df59928800382f6112c6eead323dfd28d575dc",
+                  "mime_type": "image/png",
+                  "bytes": 57556
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: right (+90 deg right) — clearance 1.34 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "25c7fd58ba0f94449402d9d3b749ac30d8e66707ba60e88f66cc5a6ff196a34e",
+                  "mime_type": "image/png",
+                  "bytes": 91769
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: behind (180 deg) — clearance 0.45 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "333b611c896d6d78a3f34d1e90202f6ab793dd13fd7cb3ceb3ab8719daf2d005",
+                  "mime_type": "image/png",
+                  "bytes": 76511
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: left (+90 deg left) — clearance 3.19 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "9b913e08cc3ccf34a029c6fb493f5353487597756a477fb74aba70ecd0e7d813",
+                  "mime_type": "image/png",
+                  "bytes": 59464
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Numbered source chunks:\n[{\"chunk_id\": 0, \"text\": \"walk up stair\"}, {\"chunk_id\": 1, \"text\": \"make a left on the stair landing\"}, {\"chunk_id\": 2, \"text\": \"make a left through the open door on the left\"}, {\"chunk_id\": 3, \"text\": \"wait at the foot of the bed\"}]"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Record an initial ordered navigation plan; does not execute movement.",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "chunk_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status",
+                    "chunk_ids"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "prompt_version": "plan.whole-chunks.v1",
+    "plan_constraint": "whole_chunks"
+  },
+  {
+    "id": "7658",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "walk down stair",
+      "stop at bottom",
+      "wait here"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Observe the initial scene, then use update_plan to organize meaningful local goals.\nPreserve the original route order, directions, counts and endpoint qualifiers when\nrevising the plan. Treat initial scene descriptions as context, not movements.\nThe VLA receives the chosen instruction, visual history and recent segment memory;\nit does not know the full route or plan.\n\nWrite self-contained local instructions: action, necessary robot-relative direction,\nidentifiable destination and stopping location when relevant. Keep related turns and\ncrossings together. Ground added details in observations; do not invent landmarks or\nmetric offsets. Prefer clear directions or salient landmark relations over introducing\ncounts. Preserve any count and counting direction required by the original instruction,\neven when difficult; do not substitute an easier endpoint. Omit Planner reasoning and\nmap node IDs from instructions.\n\nFor this offline initial plan, numbered source chunks are the minimum indivisible units.\nEach task must cover one whole chunk or several adjacent whole chunks. Do not split a chunk across tasks.\nPartition all chunk IDs exactly once in their original order, with no omissions or duplicates.\nApply the local-goal rules above when deciding which adjacent chunks to merge; do not mechanically make one task per chunk.\nPreserve every requirement in the assigned chunks, including explicit stop/wait actions. Adjacent context may clarify a destination but must not introduce another task's action.\nInclude chunk_ids with each task. Use update_plan with unique task IDs, pending statuses and a brief reason. No movement is executed."
+        },
+        {
+          "role": "user",
+          "content": "Original instruction:\nWalk down stairs.  Stop at bottom.  Wait here. \n\nInitial observation metadata:\n{\"orientation\": [0.7071067690849304, -0.0, 0.7071067690849304, 0.0], \"missing_views\": []}\nahead — clearance 5.53 m\nright (+90 deg right) — clearance 0.47 m\nbehind (180 deg) — clearance 8.0 m\nleft (+90 deg left) — clearance 0.47 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Initial observation: ahead — clearance 5.53 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "600adc377a42387171f0f19cbe04f46518d05eb6f46d3796b28b358ed7686be6",
+                  "mime_type": "image/png",
+                  "bytes": 57892
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: right (+90 deg right) — clearance 0.47 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "fb7d120dd3e1d7c35877cfc5483558951f1f09c10d4a06fa1073d89219e16d21",
+                  "mime_type": "image/png",
+                  "bytes": 25609
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: behind (180 deg) — clearance 8.0 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "add7db94ce66e1fcf4c6283468e312ace96d5888c4c321cbd5084925a28afa64",
+                  "mime_type": "image/png",
+                  "bytes": 58728
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Initial observation: left (+90 deg left) — clearance 0.47 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "7ad2b930ba48c878c4c307b0b8b6a46cbf55f5a3d71f1a6e160194eb6baedf3b",
+                  "mime_type": "image/png",
+                  "bytes": 27381
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Numbered source chunks:\n[{\"chunk_id\": 0, \"text\": \"walk down stair\"}, {\"chunk_id\": 1, \"text\": \"stop at bottom\"}, {\"chunk_id\": 2, \"text\": \"wait here\"}]"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Record an initial ordered navigation plan; does not execute movement.",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "chunk_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status",
+                    "chunk_ids"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "prompt_version": "plan.whole-chunks.v1",
+    "plan_constraint": "whole_chunks"
+  }
+]

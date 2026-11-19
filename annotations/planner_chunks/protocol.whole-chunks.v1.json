@@ -1,0 +1,102 @@
+{
+  "version": 2,
+  "alignment_prompt": "Offline semantic audit. The plan and each task's chunk_ids are frozen. Do not rewrite tasks or change their chunk assignments. Return exactly each task's assigned chunk_ids, in order. Check whether its instruction preserves the complete meaning of those source chunks: actions, route order, directions, counts and stopping conditions. Identify added, omitted or conflicting actions. Explicit stop and wait requirements are actions, not merely endpoint context. Use full_action only when the required action is fully preserved; otherwise use partial_action or a context relation as appropriate and set needs_review=true. Set full_chunk_interval_reusable=false for scope mismatch or unresolved boundary correspondence. Group assignment alone does not prove semantic fidelity or geometric reuse. Report uncovered source actions. Never invent frames, poses, distances or reference paths. Return record_chunk_alignment only; no movement is executed.\nNumbered source chunks:\n",
+  "alignment_tool": {
+    "type": "function",
+    "function": {
+      "name": "record_chunk_alignment",
+      "description": "Record semantic alignment to the already frozen plan. Does not modify or execute it.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "alignments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "task_id": {
+                  "type": "integer"
+                },
+                "chunk_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "coverage": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "chunk_id": {
+                        "type": "integer"
+                      },
+                      "relation": {
+                        "type": "string",
+                        "enum": [
+                          "full_action",
+                          "partial_action",
+                          "endpoint_context",
+                          "reference_context"
+                        ]
+                      },
+                      "explanation": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "chunk_id",
+                      "relation",
+                      "explanation"
+                    ]
+                  }
+                },
+                "full_chunk_interval_reusable": {
+                  "type": "boolean"
+                },
+                "added_details": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "needs_review": {
+                  "type": "boolean"
+                },
+                "explanation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id",
+                "chunk_ids",
+                "coverage",
+                "full_chunk_interval_reusable",
+                "added_details",
+                "needs_review",
+                "explanation"
+              ]
+            }
+          },
+          "uncovered_action_chunk_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "overall_note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alignments",
+          "uncovered_action_chunk_ids",
+          "overall_note"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,621 @@
+{
+  "backend_manifest": {
+    "config": {
+      "split": "train",
+      "source_collection": "/data/nav_storage/open-nav-harness-tools/state/pilots/lightnav-pilot-900ad14c8cad",
+      "source_review": "/data/nav_storage/open-nav-harness-tools/state/reviews/lightnav-pilot-review-479ba85a4bf8",
+      "base_request": "/data/nav_storage/open-nav-harness-tools/state/research/lightnav-short-augmentation-84ec4990b126/base_request.json",
+      "snapshot_root": "/data/nav_storage/open-nav-harness-tools/state/research/lightnav-short-augmentation-84ec4990b126/snapshot",
+      "max_tasks": 60000,
+      "max_candidates": 240000,
+      "draws_per_mode": 2,
+      "short_distance_m": 1.0,
+      "start_radius_m": 0.5,
+      "yaw_degrees": 45.0,
+      "seed": 20261115,
+      "max_steps": 160,
+      "ready_queue_size": 64,
+      "candidate_timeout_s": 600,
+      "request_timeout_s": 180,
+      "simulation_workers": [
+        {
+          "id": "sim-0",
+          "gpu": 0
+        },
+        {
+          "id": "sim-1",
+          "gpu": 2
+        },
+        {
+          "id": "sim-2",
+          "gpu": 3
+        },
+        {
+          "id": "sim-3",
+          "gpu": 4
+        },
+        {
+          "id": "sim-4",
+          "gpu": 0
+        },
+        {
+          "id": "sim-5",
+          "gpu": 2
+        },
+        {
+          "id": "sim-6",
+          "gpu": 3
+        },
+        {
+          "id": "sim-7",
+          "gpu": 4
+        },
+        {
+          "id": "sim-8",
+          "gpu": 0
+        },
+        {
+          "id": "sim-9",
+          "gpu": 2
+        },
+        {
+          "id": "sim-10",
+          "gpu": 3
+        },
+        {
+          "id": "sim-11",
+          "gpu": 4
+        },
+        {
+          "id": "sim-12",
+          "gpu": 0
+        },
+        {
+          "id": "sim-13",
+          "gpu": 2
+        },
+        {
+          "id": "sim-14",
+          "gpu": 3
+        },
+        {
+          "id": "sim-15",
+          "gpu": 4
+        }
+      ],
+      "model_profiles": [
+        {
+          "id": "fp4-0",
+          "endpoint": "http://127.0.0.1:18110/v1/chat/completions",
+          "model": "onh-qwen27b-nvfp4",
+          "slots": 16
+        },
+        {
+          "id": "fp4-1",
+          "endpoint": "http://127.0.0.1:18111/v1/chat/completions",
+          "model": "onh-qwen27b-nvfp4",
+          "slots": 16
+        },
+        {
+          "id": "fp4-2",
+          "endpoint": "http://127.0.0.1:18112/v1/chat/completions",
+          "model": "onh-qwen27b-nvfp4",
+          "slots": 16
+        },
+        {
+          "id": "fp4-3",
+          "endpoint": "http://127.0.0.1:18113/v1/chat/completions",
+          "model": "onh-qwen27b-nvfp4",
+          "slots": 16
+        }
+      ],
+      "pose_sampling_attempts": 32,
+      "guide_adjustment_radius_m": 0.25,
+      "minimum_free_disk_bytes": 107374182400,
+      "minimum_planning_clearance_m": 0.05,
+      "endpoint_adjustment_radius_m": 0.15,
+      "expert_goal_radius_m": 0.08,
+      "goal_tolerance_m": 0.12
+    },
+    "runtime": {
+      "settings": {
+        "simulation": {
+          "scenes_root": "/data/nav_storage/data/scene_datasets/mp3d_r2r61_rxr59_20261105/scene_datasets",
+          "gpu": 3,
+          "workers": 1,
+          "max_actions": 400,
+          "datasets": {
+            "train_pilot": {
+              "episodes": "/data/nav_storage/open-nav-harness-tools/state/pilots/lightnav-pilot-900ad14c8cad/episodes.json",
+              "physics": {
+                "agent_height_m": 1.5,
+                "agent_radius_m": 0.1,
+                "allow_sliding": true,
+                "velocity": {
+                  "time_step_s": 0.25
+                }
+              }
+            }
+          }
+        },
+        "policy": {
+          "model": "/unused/no-model-loaded"
+        }
+      },
+      "camera": {
+        "height_m": 0.88,
+        "pitch_down_rad": 0,
+        "width": 480,
+        "height": 270,
+        "hfov": 120,
+        "view": "88cm_level_hfov120"
+      },
+      "clearance_profile": {
+        "name": "navmesh-clearance-astar-smooth-v1",
+        "clearance_m": 0.15,
+        "grid_m": 0.1,
+        "edge_sample_m": 0.025,
+        "resample_m": 0.05,
+        "corridor_m": 0.75,
+        "max_anchor_snap_m": 0.2,
+        "max_height_step_m": 0.25,
+        "floor_bin_m": 0.05,
+        "smoothing_passes": 8,
+        "max_expansions": 20000
+      }
+    },
+    "snapshot_root": "/data/nav_storage/open-nav-harness-tools/state/research/lightnav-short-augmentation-84ec4990b126/snapshot"
+  },
+  "source_manifest_sha256": "9b430b0420b7392e5c5fc94c9767c67a76b328ee9d8c95b34c18cde80a03612c",
+  "cases": [
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/8WUmhLawc2A/8WUmhLawc2A.glb",
+        "start_position": [
+          -2.543238401412964,
+          0.10065700113773346,
+          4.119009017944336
+        ],
+        "start_rotation": [
+          0,
+          0.12513302866113046,
+          0,
+          0.992139972553315
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2862-group2-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b20113cf433d32de7a02db5a8c54d0c4936e1d95da65538b99153faa4b7adbd8",
+      "id": "loc01-front"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/8WUmhLawc2A/8WUmhLawc2A.glb",
+        "start_position": [
+          -2.543238401412964,
+          0.10065700113773346,
+          4.119009017944336
+        ],
+        "start_rotation": [
+          0,
+          0.7900313155953802,
+          0,
+          0.6130664893619883
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2862-group2-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b20113cf433d32de7a02db5a8c54d0c4936e1d95da65538b99153faa4b7adbd8",
+      "id": "loc01-right"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/8WUmhLawc2A/8WUmhLawc2A.glb",
+        "start_position": [
+          -2.543238401412964,
+          0.10065700113773346,
+          4.119009017944336
+        ],
+        "start_rotation": [
+          0,
+          -0.992139972553315,
+          0,
+          0.12513302866113057
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2862-group2-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b20113cf433d32de7a02db5a8c54d0c4936e1d95da65538b99153faa4b7adbd8",
+      "id": "loc01-back"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/8WUmhLawc2A/8WUmhLawc2A.glb",
+        "start_position": [
+          -2.543238401412964,
+          0.10065700113773346,
+          4.119009017944336
+        ],
+        "start_rotation": [
+          0,
+          -0.6130664893619882,
+          0,
+          0.7900313155953802
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2862-group2-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b20113cf433d32de7a02db5a8c54d0c4936e1d95da65538b99153faa4b7adbd8",
+      "id": "loc01-left"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/kEZ7cmS4wCh/kEZ7cmS4wCh.glb",
+        "start_position": [
+          -2.9989190101623535,
+          0.08632707595825195,
+          3.520258903503418
+        ],
+        "start_rotation": [
+          0,
+          0.35631131313919506,
+          0,
+          0.9343672982981706
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2461-group0-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "98d788a72e32bb54e1095b120d09aa6d79949c1061a5399fea5163cd2d8d6d2b",
+      "id": "loc02-front"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/kEZ7cmS4wCh/kEZ7cmS4wCh.glb",
+        "start_position": [
+          -2.9989190101623535,
+          0.08632707595825195,
+          3.520258903503418
+        ],
+        "start_rotation": [
+          0,
+          0.9126475984797983,
+          0,
+          0.408747307011382
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2461-group0-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "98d788a72e32bb54e1095b120d09aa6d79949c1061a5399fea5163cd2d8d6d2b",
+      "id": "loc02-right"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/kEZ7cmS4wCh/kEZ7cmS4wCh.glb",
+        "start_position": [
+          -2.9989190101623535,
+          0.08632707595825195,
+          3.520258903503418
+        ],
+        "start_rotation": [
+          0,
+          -0.9343672982981706,
+          0,
+          0.356311313139195
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2461-group0-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "98d788a72e32bb54e1095b120d09aa6d79949c1061a5399fea5163cd2d8d6d2b",
+      "id": "loc02-back"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/kEZ7cmS4wCh/kEZ7cmS4wCh.glb",
+        "start_position": [
+          -2.9989190101623535,
+          0.08632707595825195,
+          3.520258903503418
+        ],
+        "start_rotation": [
+          0,
+          -0.40874730701138184,
+          0,
+          0.9126475984797983
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep2461-group0-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "98d788a72e32bb54e1095b120d09aa6d79949c1061a5399fea5163cd2d8d6d2b",
+      "id": "loc02-left"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/D7N2EKCX4Sj/D7N2EKCX4Sj.glb",
+        "start_position": [
+          3.6118288040161133,
+          0.007922172546386719,
+          -5.934001922607422
+        ],
+        "start_rotation": [
+          0,
+          -0.8591597656973345,
+          0,
+          0.5117074330190068
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep3070-group1-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b8ac452099b49ebf137eb5361905811251892a259cb78167a0ebefc55f8a0254",
+      "id": "loc03-front"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/D7N2EKCX4Sj/D7N2EKCX4Sj.glb",
+        "start_position": [
+          3.6118288040161133,
+          0.007922172546386719,
+          -5.934001922607422
+        ],
+        "start_rotation": [
+          0,
+          -0.24568590057592982,
+          0,
+          0.9693494923185313
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep3070-group1-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b8ac452099b49ebf137eb5361905811251892a259cb78167a0ebefc55f8a0254",
+      "id": "loc03-right"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/D7N2EKCX4Sj/D7N2EKCX4Sj.glb",
+        "start_position": [
+          3.6118288040161133,
+          0.007922172546386719,
+          -5.934001922607422
+        ],
+        "start_rotation": [
+          0,
+          -0.5117074330190068,
+          0,
+          -0.8591597656973344
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep3070-group1-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b8ac452099b49ebf137eb5361905811251892a259cb78167a0ebefc55f8a0254",
+      "id": "loc03-back"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/D7N2EKCX4Sj/D7N2EKCX4Sj.glb",
+        "start_position": [
+          3.6118288040161133,
+          0.007922172546386719,
+          -5.934001922607422
+        ],
+        "start_rotation": [
+          0,
+          -0.9693494923185313,
+          0,
+          -0.24568590057592976
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep3070-group1-start-0/private-geometry.json",
+      "initial_pose_source_sha256": "b8ac452099b49ebf137eb5361905811251892a259cb78167a0ebefc55f8a0254",
+      "id": "loc03-left"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/8WUmhLawc2A/8WUmhLawc2A.glb",
+        "start_position": [
+          -4.2660980224609375,
+          0.10065700113773346,
+          1.1583210229873657
+        ],
+        "start_rotation": [
+          0,
+          0.8406684966048621,
+          0,
+          0.5415500704608218
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-visual-task-demo-5f35d7c8339c/demo-01/world_states.jsonl",
+      "initial_pose_source_sha256": "4e821859702248178060cf5bfb66998248ed92843bdfa166d4e21fe4bed2b320",
+      "id": "extra01-right"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/8WUmhLawc2A/8WUmhLawc2A.glb",
+        "start_position": [
+          -4.2660980224609375,
+          0.10065700113773346,
+          1.1583210229873657
+        ],
+        "start_rotation": [
+          0,
+          -0.5415500704608217,
+          0,
+          0.8406684966048621
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-visual-task-demo-5f35d7c8339c/demo-01/world_states.jsonl",
+      "initial_pose_source_sha256": "4e821859702248178060cf5bfb66998248ed92843bdfa166d4e21fe4bed2b320",
+      "id": "extra02-left"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/gTV8FGcVJC9/gTV8FGcVJC9.glb",
+        "start_position": [
+          -1.8790067434310913,
+          7.256642818450928,
+          10.50363540649414
+        ],
+        "start_rotation": [
+          0,
+          0.9560650513437133,
+          0,
+          0.29315459675594857
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep1950-group2-mid-0/private-geometry.json",
+      "initial_pose_source_sha256": "73d5e84e40fc0ce5612cb8fb8c85bc918c937076076c488cf63170e2348f0fb5",
+      "id": "extra03-right"
+    },
+    {
+      "episode": {
+        "_dataset": "train_pilot",
+        "scene_id": "mp3d/vyrNrziPKCB/vyrNrziPKCB.glb",
+        "start_position": [
+          7.941808223724365,
+          3.598568916320801,
+          10.627533912658691
+        ],
+        "start_rotation": [
+          0,
+          -0.8429236552883613,
+          0,
+          0.5380331879682775
+        ]
+      },
+      "initial_pose_source": "/data/nav_storage/nav-train/planner-pilots/pose-replenish-3325605aa77e/prepared/attempt/candidates/ep6318-group2-mid-0/private-geometry.json",
+      "initial_pose_source_sha256": "351793bfa6b8752835e8a91719bb1d89610070f2237bad09a9de6be785b0b86f",
+      "id": "extra04-front"
+    }
+  ],
+  "max_local_geodesic_m": null,
+  "admission": "audit_only",
+  "automatic_retry": false,
+  "purpose": "model_defined_visible_region_tasks",
+  "camera_coverage_conditioned": false,
+  "target_mode": "box",
+  "region_grid_size": 13,
+  "region_plan_candidates": 12,
+  "target_scope": "current_visible_floor",
+  "min_local_geodesic_m": 0.0,
+  "execution_budget_policy": {
+    "mode": "path_scaled",
+    "time_multiplier": 3.0,
+    "settle_seconds": 10.0
+  },
+  "visible_floor_policy": {
+    "enabled": true,
+    "horizontal_limit": 0.01,
+    "vertical_limit": 0.2,
+    "slope_degrees": 25.0,
+    "adjustment_support_tolerance_m": 0.025
+  },
+  "region_adjustment_radius_m": 0.15,
+  "region_max_previews": 64,
+  "region_adjustments_per_candidate": 4,
+  "simulation_workers": [
+    {
+      "id": "sim-0",
+      "gpu": 0
+    },
+    {
+      "id": "sim-1",
+      "gpu": 2
+    },
+    {
+      "id": "sim-2",
+      "gpu": 3
+    },
+    {
+      "id": "sim-3",
+      "gpu": 4
+    },
+    {
+      "id": "sim-4",
+      "gpu": 0
+    },
+    {
+      "id": "sim-5",
+      "gpu": 2
+    },
+    {
+      "id": "sim-6",
+      "gpu": 3
+    },
+    {
+      "id": "sim-7",
+      "gpu": 4
+    },
+    {
+      "id": "sim-8",
+      "gpu": 0
+    },
+    {
+      "id": "sim-9",
+      "gpu": 2
+    },
+    {
+      "id": "sim-10",
+      "gpu": 3
+    },
+    {
+      "id": "sim-11",
+      "gpu": 4
+    },
+    {
+      "id": "sim-12",
+      "gpu": 0
+    },
+    {
+      "id": "sim-13",
+      "gpu": 2
+    },
+    {
+      "id": "sim-14",
+      "gpu": 3
+    },
+    {
+      "id": "sim-15",
+      "gpu": 4
+    }
+  ],
+  "model_profiles": [
+    {
+      "id": "fp4-0",
+      "endpoint": "http://127.0.0.1:18110/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    },
+    {
+      "id": "fp4-1",
+      "endpoint": "http://127.0.0.1:18111/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    },
+    {
+      "id": "fp4-2",
+      "endpoint": "http://127.0.0.1:18112/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    },
+    {
+      "id": "fp4-3",
+      "endpoint": "http://127.0.0.1:18113/v1/chat/completions",
+      "model": "onh-qwen27b-nvfp4",
+      "slots": 16
+    }
+  ],
+  "ready_queue_size": 64,
+  "candidate_timeout_s": 600,
+  "request_timeout_s": 180,
+  "minimum_free_disk_bytes": 107374182400,
+  "collection_service": {
+    "url": "http://127.0.0.1:18812",
+    "shared_root": "/data/nav_storage/sim-engine/collections/train-v1",
+    "dataset": "train_pilot",
+    "camera": "visible_88cm_hfov120",
+    "max_pending": 64,
+    "poll_interval_s": 0.1
+  }
+}

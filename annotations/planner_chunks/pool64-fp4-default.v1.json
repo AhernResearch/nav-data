@@ -1,0 +1,63 @@
+{
+  "ssh_host": "A100",
+  "max_total_inflight": 64,
+  "profiles": [
+    {
+      "id": "fp4-0",
+      "endpoint": "http://127.0.0.1:18110/v1/chat/completions",
+      "slots": 16,
+      "config": {
+        "model": "onh-qwen27b-nvfp4",
+        "request_timeout_s": 180,
+        "plan_max_tokens": 2048,
+        "alignment_max_tokens": 4096,
+        "temperature": 0,
+        "thinking": false,
+        "admission": "audit_only"
+      }
+    },
+    {
+      "id": "fp4-1",
+      "endpoint": "http://127.0.0.1:18111/v1/chat/completions",
+      "slots": 16,
+      "config": {
+        "model": "onh-qwen27b-nvfp4",
+        "request_timeout_s": 180,
+        "plan_max_tokens": 2048,
+        "alignment_max_tokens": 4096,
+        "temperature": 0,
+        "thinking": false,
+        "admission": "audit_only"
+      }
+    },
+    {
+      "id": "fp4-2",
+      "endpoint": "http://127.0.0.1:18112/v1/chat/completions",
+      "slots": 16,
+      "config": {
+        "model": "onh-qwen27b-nvfp4",
+        "request_timeout_s": 180,
+        "plan_max_tokens": 2048,
+        "alignment_max_tokens": 4096,
+        "temperature": 0,
+        "thinking": false,
+        "admission": "audit_only"
+      }
+    },
+    {
+      "id": "fp4-3",
+      "endpoint": "http://127.0.0.1:18113/v1/chat/completions",
+      "slots": 16,
+      "config": {
+        "model": "onh-qwen27b-nvfp4",
+        "request_timeout_s": 180,
+        "plan_max_tokens": 2048,
+        "alignment_max_tokens": 4096,
+        "temperature": 0,
+        "thinking": false,
+        "admission": "audit_only"
+      }
+    }
+  ],
+  "server_max_num_seqs": "default; omitted at launch"
+}

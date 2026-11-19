@@ -1,0 +1,1607 @@
+[
+  {
+    "id": "1",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "go around the right side of the center unit",
+      "and stop by the right side doorway with the dining table and mirror in it"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You navigate with a local trajectory model. You own task decomposition, evidence-based\nprogress assessment, corrections, memory and the final stop decision.\nOriginal instruction:\nGo around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \n\nObserve the initial scene and write a plan of meaningful local goals. Preserve route\norder, directions, counts and endpoint qualifiers; do not invent unseen landmarks.\nAn initial room description is context, not an action. Keep a turn with its destination.\nThe VLA receives only the chosen local instruction and your latest executed-segment memory. It does not know the original full route or global plan.\n\nUse update_plan to replace your full task list and update completion statuses. Each task has a stable id, instruction and status; status is pending, in_progress or completed (at most one in_progress). Select the task with\nexecute_subtask(task_id). You may override the instruction for this call without modifying the plan. Do not repeat a turn or doorway crossing already\ncompleted. A VLA stop is a request for your judgment, not proof of success.\nRevise how to achieve the original route, not what it requires: do not replace an\nunachieved action with a description of where you already are. Reopen unsupported completions.\nExecution ends at policy stop, blockage or runtime/global limits. There are no model-selected\ndistance, angle or action caps. A runtime limit does not establish completion.\n\nAt each handoff examine the returned route evidence and endpoint views. Decide\nwhether to continue, repair, inspect, update the plan or finish. Use execute_subtask for forward progress and local repairs, with an updated local instruction when needed. Use navigate_to_node to return to a visited node; no review call is required to unlock movement.\nUse observe(views=[\"front\", \"left\"]) to select current camera directions without rotation.\nUse read_memory(node_id, images=\"endpoint\", views=[\"front\"]) for historical node views.\nAvoid fetching observations already provided by the preceding tool unless necessary.\n\nUse update_memory(start_node_id, end_node_id, caption) to summarize the CURRENT execution.\nNodes are places at execution boundaries; captions describe directed experiences between\nplaces, not the places themselves. Both IDs must be the numbers printed on observe_map\nand must match its pending segment. First call observe_map after the latest movement,\nthen read it in a preceding model turn. Never batch observe_map and update_memory.\nMaps are requested explicitly; read_memory does not satisfy this read requirement.\nSummarize what was done, what changed, unfinished conditions and uncertainty. For an\nexploration describe the question and observed discoveries; for a failed attempt describe\nwhat was not achieved and the evidence; for a return explain why and where you returned.\nNot finding the target does not establish that a passage is impassable.\nA second write revises only this execution; the next movement closes it. Repeated trips\nbetween the same nodes remain separate. Update task status only through update_plan.\nUnwritten segments are explicitly marked, and movement is not gated on caption writing.\n\nobserve_map supplies bounded recent memory and history related to your current node,\nplus an index of omitted records. read_memory(node_id) retrieves incoming/outgoing history;\nread_memory(node_id, other_node_id) retrieves that direction only. Use next_offset for\nolder pages and images=\"trajectory\" when past visual evidence could change your decision.\nMemory captions are prior model assessments, not unquestionable facts. When an old branch,\nfailed approach or ambiguous location matters, consult its history before repeating it.\nThe latest map memory context supersedes earlier snapshots. Full history stays in storage.\nVLA visual history is runtime-managed using native policy sampling. Within a task it remains continuous; map memory is not appended to VLA instructions. Current execution keyframes\nare provided automatically; older images can be retrieved without carrying them every turn.\n\nA doorway visible ahead does not establish that it was crossed. Similar beds or rooms\nare not interchangeable: use ordered transitions and spatial continuity to identify\nthe right one. A map provides spatial relationships, not an oracle for room identity.\nKeep uncertainty explicit; check the evidence most useful for resolving it. Explain\nplan changes and stopping decisions briefly in observable terms.\n\nUse terminate_episode(status=\"complete\", reason=...) when you judge the original route\nfinished, or status=\"abort\" when giving up. STOP is permanent. Your declaration and\nplan checkboxes do not determine benchmark success; actual final position does.\nKeep working until this tool stops the episode. Budget: 500 low-level actions.\nNo user can answer questions during navigation.\n"
+        },
+        {
+          "role": "user",
+          "content": "Begin with observe(views=[\"front\",\"right\",\"back\",\"left\"]), then write a local plan."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-b0f3a40d35d5bbc4",
+              "type": "function",
+              "function": {
+                "name": "observe",
+                "arguments": "{\"views\": [\"front\", \"right\", \"back\", \"left\"]}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-b0f3a40d35d5bbc4",
+          "content": "{\"orientation\": [-0.7071067690849304, -0.0, 0.7071067690849304, -0.0], \"missing_views\": []}\nahead \u2014 clearance 4.97 m\nright (+90 deg right) \u2014 clearance 0.62 m\nbehind (180 deg) \u2014 clearance 0.61 m\nleft (+90 deg left) \u2014 clearance 4.22 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-b0f3a40d35d5bbc4: ahead \u2014 clearance 4.97 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "be4e520c30c7707e540388375e231971db162a298c018587a08d11cf492df6e2",
+                  "mime_type": "image/png",
+                  "bytes": 102339
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-b0f3a40d35d5bbc4: right (+90 deg right) \u2014 clearance 0.62 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "c4037f4217df8017a6106fa68d9f07d341d21ec27432e56e0a49dbfdde9fcc2a",
+                  "mime_type": "image/png",
+                  "bytes": 103410
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-b0f3a40d35d5bbc4: behind (180 deg) \u2014 clearance 0.61 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "50f0bf533674308f09ea2ba4dc91c8db1b3abe7d1adadd1276adaae92bca87da",
+                  "mime_type": "image/png",
+                  "bytes": 79052
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-b0f3a40d35d5bbc4: left (+90 deg left) \u2014 clearance 4.22 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "9b7022d1cbd9c6fa93f2d55c5b5147df164514bb24e1eb6f72289a99d94bd6eb",
+                  "mime_type": "image/png",
+                  "bytes": 105408
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Current persisted task state and previously written work summary. Plan statuses and memory captions are your assessments, not verified completion. The original instruction remains the task; use observations to check these assessments:\n{\"plan\": [], \"active_task_id\": null, \"current_node_id\": 0, \"pending_segment\": {}, \"latest_memory\": null, \"map_read_valid\": false, \"memory_write_hint\": \"No finished segment to annotate.\", \"steps_remaining\": 500, \"completion_claim\": null}"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "observe",
+            "description": "Inspect selected simultaneous camera directions without moving or rotating.\n\n        Movement already returns endpoint views; request fresh views only when needed.\n        Each image identifies its direction, capture orientation and approximate clearance.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "views": {
+                  "items": {
+                    "enum": [
+                      "front",
+                      "right",
+                      "back",
+                      "left"
+                    ],
+                    "type": "string"
+                  },
+                  "title": "Views",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "views"
+              ],
+              "title": "observeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "terminate_episode",
+            "description": "Permanently STOP here. Declare complete or abort and explain the endpoint evidence.\n\n        This is your decision, independent of plan checkboxes. Evaluation measures actual\n        success separately; a completion declaration cannot make a route successful.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "abort"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "title": "terminate_episodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "observe_map",
+            "description": "Inspect the observed top-down colour map, travelled path, current pose and numbered visited nodes. Unknown cells are unobserved, not free space. Path colour runs blue (start) to red (recent); the red arrow is current pose. The map keeps a fixed world orientation but its crop can change. IDs identify execution-boundary places, including revisits; captions belong to directed traversals. Returns the pending start -> end segment, recent memory and an index for read_memory. Read this map in a separate turn before update_memory. Does not move or reveal the goal.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {},
+              "title": "observe_mapArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "navigate_to_node",
+            "description": "Retrace already travelled ground to a visited node by its map ID. Node IDs remain stable. Use observe_map for node geometry and available destinations. This does not find unvisited goals.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "navigate_to_nodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Write or revise your plan. Each task needs id, instruction and status.\n\n        Replace the full plan, preserving IDs for retained tasks and explaining the change.\n        Each status is pending, in_progress or completed; at most one is in_progress.\n        Preserve the original route requirements when changing the approach. Statuses are\n        your assessments, not verification; a failed action is not a completed requirement.\n        Reopen incorrect completions here. This records task state; it does not execute movement.\n        ",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "execute_subtask",
+            "description": "Delegate one chosen task. Optionally rewrite its remaining instruction from the current pose.\n\n        Runs until policy stop, blockage or runtime/global limits; no per-call distance or turn cap.\n        VLA stop returns control, not\n        global success: subtask_return=vla_stop means only that the policy requested a stop.\n        Visual history is runtime-managed using native policy sampling. Within a task it remains continuous; no map captions are sent to the policy.\n        Returns route evidence and endpoint views. Request observe_map separately. You choose whether to review, repair,\n        continue, replan or stop; there is no mandatory review gate.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "task_id": {
+                  "title": "Task Id",
+                  "type": "integer"
+                },
+                "instruction": {
+                  "default": "",
+                  "title": "Instruction",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id"
+              ],
+              "title": "execute_subtaskArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_memory",
+            "description": "Summarize the current execution from start_node_id to end_node_id (1-800 characters).\n\n        Both IDs are the numbers printed on observe_map, not task IDs. First call observe_map\n        AFTER the latest motion and read it in a preceding model turn; automatic maps and\n        read_memory do not grant write access. IDs must match the pending segment on that map.\n        Describe progress, discoveries, failed conditions, return reasons and uncertainty\n        supported by this segment's ordered images. Exploration and return are different\n        experiences; failure to find an object does not prove a passage is blocked.\n        Only the current segment is writable. Repeating this call revises its caption;\n        starting another movement closes it. Earlier traversals are never overwritten.\n        Geometry/evidence are system-owned. Task status belongs to update_plan.\n        Separate observed transitions from inferred identity/completion in the caption;\n        captions are model assessments and do not independently verify plan completion.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "start_node_id": {
+                  "title": "Start Node Id",
+                  "type": "integer"
+                },
+                "end_node_id": {
+                  "title": "End Node Id",
+                  "type": "integer"
+                },
+                "caption": {
+                  "title": "Caption",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "start_node_id",
+                "end_node_id",
+                "caption"
+              ],
+              "title": "update_memoryArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "read_memory",
+            "description": "Read historical experiences, never move or grant memory-write access.\n\n        node_id selects incoming/outgoing history; other_node_id restricts node_id -> other_node_id.\n        Five records newest-first; next_offset retrieves older pages. Captions are model assessments.\n        images=endpoint returns one saved snapshot (latest node visit, or newest matched segment's\n        endpoint); views selects its directions, default front. Missing directions are reported,\n        never borrowed from another visit. trajectory returns up to four ordered process frames.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                },
+                "other_node_id": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Other Node Id"
+                },
+                "images": {
+                  "default": "none",
+                  "enum": [
+                    "none",
+                    "endpoint",
+                    "trajectory"
+                  ],
+                  "title": "Images",
+                  "type": "string"
+                },
+                "views": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "enum": [
+                          "front",
+                          "right",
+                          "back",
+                          "left"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Views"
+                },
+                "offset": {
+                  "default": 0,
+                  "title": "Offset",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "read_memoryArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    }
+  },
+  {
+    "id": "457",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "walk out of the bathroom",
+      "and through the television room into the hallway",
+      "in the hall go to the stair",
+      "and go up the stair stop on the fourth from the top stair"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You navigate with a local trajectory model. You own task decomposition, evidence-based\nprogress assessment, corrections, memory and the final stop decision.\nOriginal instruction:\nWalk out of the bathroom and through the television room into the hallway. In the hall go to the stairs and go up the stairs, stopping on the fourth from the top stair. \n\nObserve the initial scene and write a plan of meaningful local goals. Preserve route\norder, directions, counts and endpoint qualifiers; do not invent unseen landmarks.\nAn initial room description is context, not an action. Keep a turn with its destination.\nThe VLA receives only the chosen local instruction and your latest executed-segment memory. It does not know the original full route or global plan.\n\nUse update_plan to replace your full task list and update completion statuses. Each task has a stable id, instruction and status; status is pending, in_progress or completed (at most one in_progress). Select the task with\nexecute_subtask(task_id). You may override the instruction for this call without modifying the plan. Do not repeat a turn or doorway crossing already\ncompleted. A VLA stop is a request for your judgment, not proof of success.\nRevise how to achieve the original route, not what it requires: do not replace an\nunachieved action with a description of where you already are. Reopen unsupported completions.\nExecution ends at policy stop, blockage or runtime/global limits. There are no model-selected\ndistance, angle or action caps. A runtime limit does not establish completion.\n\nAt each handoff examine the returned route evidence and endpoint views. Decide\nwhether to continue, repair, inspect, update the plan or finish. Use execute_subtask for forward progress and local repairs, with an updated local instruction when needed. Use navigate_to_node to return to a visited node; no review call is required to unlock movement.\nUse observe(views=[\"front\", \"left\"]) to select current camera directions without rotation.\nUse read_memory(node_id, images=\"endpoint\", views=[\"front\"]) for historical node views.\nAvoid fetching observations already provided by the preceding tool unless necessary.\n\nUse update_memory(start_node_id, end_node_id, caption) to summarize the CURRENT execution.\nNodes are places at execution boundaries; captions describe directed experiences between\nplaces, not the places themselves. Both IDs must be the numbers printed on observe_map\nand must match its pending segment. First call observe_map after the latest movement,\nthen read it in a preceding model turn. Never batch observe_map and update_memory.\nMaps are requested explicitly; read_memory does not satisfy this read requirement.\nSummarize what was done, what changed, unfinished conditions and uncertainty. For an\nexploration describe the question and observed discoveries; for a failed attempt describe\nwhat was not achieved and the evidence; for a return explain why and where you returned.\nNot finding the target does not establish that a passage is impassable.\nA second write revises only this execution; the next movement closes it. Repeated trips\nbetween the same nodes remain separate. Update task status only through update_plan.\nUnwritten segments are explicitly marked, and movement is not gated on caption writing.\n\nobserve_map supplies bounded recent memory and history related to your current node,\nplus an index of omitted records. read_memory(node_id) retrieves incoming/outgoing history;\nread_memory(node_id, other_node_id) retrieves that direction only. Use next_offset for\nolder pages and images=\"trajectory\" when past visual evidence could change your decision.\nMemory captions are prior model assessments, not unquestionable facts. When an old branch,\nfailed approach or ambiguous location matters, consult its history before repeating it.\nThe latest map memory context supersedes earlier snapshots. Full history stays in storage.\nVLA visual history is runtime-managed using native policy sampling. Within a task it remains continuous; map memory is not appended to VLA instructions. Current execution keyframes\nare provided automatically; older images can be retrieved without carrying them every turn.\n\nA doorway visible ahead does not establish that it was crossed. Similar beds or rooms\nare not interchangeable: use ordered transitions and spatial continuity to identify\nthe right one. A map provides spatial relationships, not an oracle for room identity.\nKeep uncertainty explicit; check the evidence most useful for resolving it. Explain\nplan changes and stopping decisions briefly in observable terms.\n\nUse terminate_episode(status=\"complete\", reason=...) when you judge the original route\nfinished, or status=\"abort\" when giving up. STOP is permanent. Your declaration and\nplan checkboxes do not determine benchmark success; actual final position does.\nKeep working until this tool stops the episode. Budget: 500 low-level actions.\nNo user can answer questions during navigation.\n"
+        },
+        {
+          "role": "user",
+          "content": "Begin with observe(views=[\"front\",\"right\",\"back\",\"left\"]), then write a local plan."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-bc9841ff46fe081f",
+              "type": "function",
+              "function": {
+                "name": "observe",
+                "arguments": "{\"views\": [\"front\", \"right\", \"back\", \"left\"]}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-bc9841ff46fe081f",
+          "content": "{\"orientation\": [0.7071067690849304, -0.0, 0.7071067690849304, 0.0], \"missing_views\": []}\nahead \u2014 clearance 0.43 m\nright (+90 deg right) \u2014 clearance 2.48 m\nbehind (180 deg) \u2014 clearance 1.36 m\nleft (+90 deg left) \u2014 clearance 0.42 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-bc9841ff46fe081f: ahead \u2014 clearance 0.43 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "45045f7a75fab4f2c27dc0b6db79f9b957f6ded7e2d40b7d636b346f56f2af61",
+                  "mime_type": "image/png",
+                  "bytes": 111930
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-bc9841ff46fe081f: right (+90 deg right) \u2014 clearance 2.48 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "3184e4e4709e0fb559f393188815f757d2293a4c71ff77db1a9de12d1f019b5b",
+                  "mime_type": "image/png",
+                  "bytes": 80461
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-bc9841ff46fe081f: behind (180 deg) \u2014 clearance 1.36 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "878f8fbd485b780297605b7ae54733fd8fe0854eb40c43d9bd957001fc174274",
+                  "mime_type": "image/png",
+                  "bytes": 112561
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-bc9841ff46fe081f: left (+90 deg left) \u2014 clearance 0.42 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "98ed959b171b71d0c774438926be794cd313feeaf1c8fac282a04583b8458afd",
+                  "mime_type": "image/png",
+                  "bytes": 134574
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Current persisted task state and previously written work summary. Plan statuses and memory captions are your assessments, not verified completion. The original instruction remains the task; use observations to check these assessments:\n{\"plan\": [], \"active_task_id\": null, \"current_node_id\": 0, \"pending_segment\": {}, \"latest_memory\": null, \"map_read_valid\": false, \"memory_write_hint\": \"No finished segment to annotate.\", \"steps_remaining\": 500, \"completion_claim\": null}"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "observe",
+            "description": "Inspect selected simultaneous camera directions without moving or rotating.\n\n        Movement already returns endpoint views; request fresh views only when needed.\n        Each image identifies its direction, capture orientation and approximate clearance.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "views": {
+                  "items": {
+                    "enum": [
+                      "front",
+                      "right",
+                      "back",
+                      "left"
+                    ],
+                    "type": "string"
+                  },
+                  "title": "Views",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "views"
+              ],
+              "title": "observeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "terminate_episode",
+            "description": "Permanently STOP here. Declare complete or abort and explain the endpoint evidence.\n\n        This is your decision, independent of plan checkboxes. Evaluation measures actual\n        success separately; a completion declaration cannot make a route successful.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "abort"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "title": "terminate_episodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "observe_map",
+            "description": "Inspect the observed top-down colour map, travelled path, current pose and numbered visited nodes. Unknown cells are unobserved, not free space. Path colour runs blue (start) to red (recent); the red arrow is current pose. The map keeps a fixed world orientation but its crop can change. IDs identify execution-boundary places, including revisits; captions belong to directed traversals. Returns the pending start -> end segment, recent memory and an index for read_memory. Read this map in a separate turn before update_memory. Does not move or reveal the goal.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {},
+              "title": "observe_mapArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "navigate_to_node",
+            "description": "Retrace already travelled ground to a visited node by its map ID. Node IDs remain stable. Use observe_map for node geometry and available destinations. This does not find unvisited goals.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "navigate_to_nodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Write or revise your plan. Each task needs id, instruction and status.\n\n        Replace the full plan, preserving IDs for retained tasks and explaining the change.\n        Each status is pending, in_progress or completed; at most one is in_progress.\n        Preserve the original route requirements when changing the approach. Statuses are\n        your assessments, not verification; a failed action is not a completed requirement.\n        Reopen incorrect completions here. This records task state; it does not execute movement.\n        ",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "execute_subtask",
+            "description": "Delegate one chosen task. Optionally rewrite its remaining instruction from the current pose.\n\n        Runs until policy stop, blockage or runtime/global limits; no per-call distance or turn cap.\n        VLA stop returns control, not\n        global success: subtask_return=vla_stop means only that the policy requested a stop.\n        Visual history is runtime-managed using native policy sampling. Within a task it remains continuous; no map captions are sent to the policy.\n        Returns route evidence and endpoint views. Request observe_map separately. You choose whether to review, repair,\n        continue, replan or stop; there is no mandatory review gate.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "task_id": {
+                  "title": "Task Id",
+                  "type": "integer"
+                },
+                "instruction": {
+                  "default": "",
+                  "title": "Instruction",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id"
+              ],
+              "title": "execute_subtaskArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_memory",
+            "description": "Summarize the current execution from start_node_id to end_node_id (1-800 characters).\n\n        Both IDs are the numbers printed on observe_map, not task IDs. First call observe_map\n        AFTER the latest motion and read it in a preceding model turn; automatic maps and\n        read_memory do not grant write access. IDs must match the pending segment on that map.\n        Describe progress, discoveries, failed conditions, return reasons and uncertainty\n        supported by this segment's ordered images. Exploration and return are different\n        experiences; failure to find an object does not prove a passage is blocked.\n        Only the current segment is writable. Repeating this call revises its caption;\n        starting another movement closes it. Earlier traversals are never overwritten.\n        Geometry/evidence are system-owned. Task status belongs to update_plan.\n        Separate observed transitions from inferred identity/completion in the caption;\n        captions are model assessments and do not independently verify plan completion.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "start_node_id": {
+                  "title": "Start Node Id",
+                  "type": "integer"
+                },
+                "end_node_id": {
+                  "title": "End Node Id",
+                  "type": "integer"
+                },
+                "caption": {
+                  "title": "Caption",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "start_node_id",
+                "end_node_id",
+                "caption"
+              ],
+              "title": "update_memoryArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "read_memory",
+            "description": "Read historical experiences, never move or grant memory-write access.\n\n        node_id selects incoming/outgoing history; other_node_id restricts node_id -> other_node_id.\n        Five records newest-first; next_offset retrieves older pages. Captions are model assessments.\n        images=endpoint returns one saved snapshot (latest node visit, or newest matched segment's\n        endpoint); views selects its directions, default front. Missing directions are reported,\n        never borrowed from another visit. trajectory returns up to four ordered process frames.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                },
+                "other_node_id": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Other Node Id"
+                },
+                "images": {
+                  "default": "none",
+                  "enum": [
+                    "none",
+                    "endpoint",
+                    "trajectory"
+                  ],
+                  "title": "Images",
+                  "type": "string"
+                },
+                "views": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "enum": [
+                          "front",
+                          "right",
+                          "back",
+                          "left"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Views"
+                },
+                "offset": {
+                  "default": 0,
+                  "title": "Offset",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "read_memoryArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    }
+  },
+  {
+    "id": "7016",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "walk up stair",
+      "make a left on the stair landing",
+      "make a left through the open door on the left",
+      "wait at the foot of the bed"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You navigate with a local trajectory model. You own task decomposition, evidence-based\nprogress assessment, corrections, memory and the final stop decision.\nOriginal instruction:\nWalk up stairs. Make a left on the stair landing. Make a left through the open door on the left. Wait at the foot of the bed. \n\nObserve the initial scene and write a plan of meaningful local goals. Preserve route\norder, directions, counts and endpoint qualifiers; do not invent unseen landmarks.\nAn initial room description is context, not an action. Keep a turn with its destination.\nThe VLA receives only the chosen local instruction and your latest executed-segment memory. It does not know the original full route or global plan.\n\nUse update_plan to replace your full task list and update completion statuses. Each task has a stable id, instruction and status; status is pending, in_progress or completed (at most one in_progress). Select the task with\nexecute_subtask(task_id). You may override the instruction for this call without modifying the plan. Do not repeat a turn or doorway crossing already\ncompleted. A VLA stop is a request for your judgment, not proof of success.\nRevise how to achieve the original route, not what it requires: do not replace an\nunachieved action with a description of where you already are. Reopen unsupported completions.\nExecution ends at policy stop, blockage or runtime/global limits. There are no model-selected\ndistance, angle or action caps. A runtime limit does not establish completion.\n\nAt each handoff examine the returned route evidence and endpoint views. Decide\nwhether to continue, repair, inspect, update the plan or finish. Use execute_subtask for forward progress and local repairs, with an updated local instruction when needed. Use navigate_to_node to return to a visited node; no review call is required to unlock movement.\nUse observe(views=[\"front\", \"left\"]) to select current camera directions without rotation.\nUse read_memory(node_id, images=\"endpoint\", views=[\"front\"]) for historical node views.\nAvoid fetching observations already provided by the preceding tool unless necessary.\n\nUse update_memory(start_node_id, end_node_id, caption) to summarize the CURRENT execution.\nNodes are places at execution boundaries; captions describe directed experiences between\nplaces, not the places themselves. Both IDs must be the numbers printed on observe_map\nand must match its pending segment. First call observe_map after the latest movement,\nthen read it in a preceding model turn. Never batch observe_map and update_memory.\nMaps are requested explicitly; read_memory does not satisfy this read requirement.\nSummarize what was done, what changed, unfinished conditions and uncertainty. For an\nexploration describe the question and observed discoveries; for a failed attempt describe\nwhat was not achieved and the evidence; for a return explain why and where you returned.\nNot finding the target does not establish that a passage is impassable.\nA second write revises only this execution; the next movement closes it. Repeated trips\nbetween the same nodes remain separate. Update task status only through update_plan.\nUnwritten segments are explicitly marked, and movement is not gated on caption writing.\n\nobserve_map supplies bounded recent memory and history related to your current node,\nplus an index of omitted records. read_memory(node_id) retrieves incoming/outgoing history;\nread_memory(node_id, other_node_id) retrieves that direction only. Use next_offset for\nolder pages and images=\"trajectory\" when past visual evidence could change your decision.\nMemory captions are prior model assessments, not unquestionable facts. When an old branch,\nfailed approach or ambiguous location matters, consult its history before repeating it.\nThe latest map memory context supersedes earlier snapshots. Full history stays in storage.\nVLA visual history is runtime-managed using native policy sampling. Within a task it remains continuous; map memory is not appended to VLA instructions. Current execution keyframes\nare provided automatically; older images can be retrieved without carrying them every turn.\n\nA doorway visible ahead does not establish that it was crossed. Similar beds or rooms\nare not interchangeable: use ordered transitions and spatial continuity to identify\nthe right one. A map provides spatial relationships, not an oracle for room identity.\nKeep uncertainty explicit; check the evidence most useful for resolving it. Explain\nplan changes and stopping decisions briefly in observable terms.\n\nUse terminate_episode(status=\"complete\", reason=...) when you judge the original route\nfinished, or status=\"abort\" when giving up. STOP is permanent. Your declaration and\nplan checkboxes do not determine benchmark success; actual final position does.\nKeep working until this tool stops the episode. Budget: 500 low-level actions.\nNo user can answer questions during navigation.\n"
+        },
+        {
+          "role": "user",
+          "content": "Begin with observe(views=[\"front\",\"right\",\"back\",\"left\"]), then write a local plan."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-8dcc1807f609cac1",
+              "type": "function",
+              "function": {
+                "name": "observe",
+                "arguments": "{\"views\": [\"front\", \"right\", \"back\", \"left\"]}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-8dcc1807f609cac1",
+          "content": "{\"orientation\": [0.8660253882408142, -0.0, 0.5, 0.0], \"missing_views\": []}\nahead \u2014 clearance 0.41 m\nright (+90 deg right) \u2014 clearance 1.34 m\nbehind (180 deg) \u2014 clearance 0.45 m\nleft (+90 deg left) \u2014 clearance 3.19 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-8dcc1807f609cac1: ahead \u2014 clearance 0.41 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "9be0b1bb2d81d794b40e4f76a4df59928800382f6112c6eead323dfd28d575dc",
+                  "mime_type": "image/png",
+                  "bytes": 57556
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-8dcc1807f609cac1: right (+90 deg right) \u2014 clearance 1.34 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "25c7fd58ba0f94449402d9d3b749ac30d8e66707ba60e88f66cc5a6ff196a34e",
+                  "mime_type": "image/png",
+                  "bytes": 91769
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-8dcc1807f609cac1: behind (180 deg) \u2014 clearance 0.45 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "333b611c896d6d78a3f34d1e90202f6ab793dd13fd7cb3ceb3ab8719daf2d005",
+                  "mime_type": "image/png",
+                  "bytes": 76511
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-8dcc1807f609cac1: left (+90 deg left) \u2014 clearance 3.19 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "9b913e08cc3ccf34a029c6fb493f5353487597756a477fb74aba70ecd0e7d813",
+                  "mime_type": "image/png",
+                  "bytes": 59464
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Current persisted task state and previously written work summary. Plan statuses and memory captions are your assessments, not verified completion. The original instruction remains the task; use observations to check these assessments:\n{\"plan\": [], \"active_task_id\": null, \"current_node_id\": 0, \"pending_segment\": {}, \"latest_memory\": null, \"map_read_valid\": false, \"memory_write_hint\": \"No finished segment to annotate.\", \"steps_remaining\": 500, \"completion_claim\": null}"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "observe",
+            "description": "Inspect selected simultaneous camera directions without moving or rotating.\n\n        Movement already returns endpoint views; request fresh views only when needed.\n        Each image identifies its direction, capture orientation and approximate clearance.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "views": {
+                  "items": {
+                    "enum": [
+                      "front",
+                      "right",
+                      "back",
+                      "left"
+                    ],
+                    "type": "string"
+                  },
+                  "title": "Views",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "views"
+              ],
+              "title": "observeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "terminate_episode",
+            "description": "Permanently STOP here. Declare complete or abort and explain the endpoint evidence.\n\n        This is your decision, independent of plan checkboxes. Evaluation measures actual\n        success separately; a completion declaration cannot make a route successful.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "abort"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "title": "terminate_episodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "observe_map",
+            "description": "Inspect the observed top-down colour map, travelled path, current pose and numbered visited nodes. Unknown cells are unobserved, not free space. Path colour runs blue (start) to red (recent); the red arrow is current pose. The map keeps a fixed world orientation but its crop can change. IDs identify execution-boundary places, including revisits; captions belong to directed traversals. Returns the pending start -> end segment, recent memory and an index for read_memory. Read this map in a separate turn before update_memory. Does not move or reveal the goal.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {},
+              "title": "observe_mapArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "navigate_to_node",
+            "description": "Retrace already travelled ground to a visited node by its map ID. Node IDs remain stable. Use observe_map for node geometry and available destinations. This does not find unvisited goals.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "navigate_to_nodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Write or revise your plan. Each task needs id, instruction and status.\n\n        Replace the full plan, preserving IDs for retained tasks and explaining the change.\n        Each status is pending, in_progress or completed; at most one is in_progress.\n        Preserve the original route requirements when changing the approach. Statuses are\n        your assessments, not verification; a failed action is not a completed requirement.\n        Reopen incorrect completions here. This records task state; it does not execute movement.\n        ",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "execute_subtask",
+            "description": "Delegate one chosen task. Optionally rewrite its remaining instruction from the current pose.\n\n        Runs until policy stop, blockage or runtime/global limits; no per-call distance or turn cap.\n        VLA stop returns control, not\n        global success: subtask_return=vla_stop means only that the policy requested a stop.\n        Visual history is runtime-managed using native policy sampling. Within a task it remains continuous; no map captions are sent to the policy.\n        Returns route evidence and endpoint views. Request observe_map separately. You choose whether to review, repair,\n        continue, replan or stop; there is no mandatory review gate.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "task_id": {
+                  "title": "Task Id",
+                  "type": "integer"
+                },
+                "instruction": {
+                  "default": "",
+                  "title": "Instruction",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id"
+              ],
+              "title": "execute_subtaskArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_memory",
+            "description": "Summarize the current execution from start_node_id to end_node_id (1-800 characters).\n\n        Both IDs are the numbers printed on observe_map, not task IDs. First call observe_map\n        AFTER the latest motion and read it in a preceding model turn; automatic maps and\n        read_memory do not grant write access. IDs must match the pending segment on that map.\n        Describe progress, discoveries, failed conditions, return reasons and uncertainty\n        supported by this segment's ordered images. Exploration and return are different\n        experiences; failure to find an object does not prove a passage is blocked.\n        Only the current segment is writable. Repeating this call revises its caption;\n        starting another movement closes it. Earlier traversals are never overwritten.\n        Geometry/evidence are system-owned. Task status belongs to update_plan.\n        Separate observed transitions from inferred identity/completion in the caption;\n        captions are model assessments and do not independently verify plan completion.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "start_node_id": {
+                  "title": "Start Node Id",
+                  "type": "integer"
+                },
+                "end_node_id": {
+                  "title": "End Node Id",
+                  "type": "integer"
+                },
+                "caption": {
+                  "title": "Caption",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "start_node_id",
+                "end_node_id",
+                "caption"
+              ],
+              "title": "update_memoryArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "read_memory",
+            "description": "Read historical experiences, never move or grant memory-write access.\n\n        node_id selects incoming/outgoing history; other_node_id restricts node_id -> other_node_id.\n        Five records newest-first; next_offset retrieves older pages. Captions are model assessments.\n        images=endpoint returns one saved snapshot (latest node visit, or newest matched segment's\n        endpoint); views selects its directions, default front. Missing directions are reported,\n        never borrowed from another visit. trajectory returns up to four ordered process frames.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                },
+                "other_node_id": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Other Node Id"
+                },
+                "images": {
+                  "default": "none",
+                  "enum": [
+                    "none",
+                    "endpoint",
+                    "trajectory"
+                  ],
+                  "title": "Images",
+                  "type": "string"
+                },
+                "views": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "enum": [
+                          "front",
+                          "right",
+                          "back",
+                          "left"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Views"
+                },
+                "offset": {
+                  "default": 0,
+                  "title": "Offset",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "read_memoryArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    }
+  },
+  {
+    "id": "7658",
+    "split": "train",
+    "audit_only": true,
+    "chunks": [
+      "walk down stair",
+      "stop at bottom",
+      "wait here"
+    ],
+    "request": {
+      "model": "onh-qwen27b-nvfp4",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You navigate with a local trajectory model. You own task decomposition, evidence-based\nprogress assessment, corrections, memory and the final stop decision.\nOriginal instruction:\nWalk down stairs.  Stop at bottom.  Wait here. \n\nObserve the initial scene and write a plan of meaningful local goals. Preserve route\norder, directions, counts and endpoint qualifiers; do not invent unseen landmarks.\nAn initial room description is context, not an action. Keep a turn with its destination.\nThe VLA receives only the chosen local instruction and your latest executed-segment memory. It does not know the original full route or global plan.\n\nUse update_plan to replace your full task list and update completion statuses. Each task has a stable id, instruction and status; status is pending, in_progress or completed (at most one in_progress). Select the task with\nexecute_subtask(task_id). You may override the instruction for this call without modifying the plan. Do not repeat a turn or doorway crossing already\ncompleted. A VLA stop is a request for your judgment, not proof of success.\nRevise how to achieve the original route, not what it requires: do not replace an\nunachieved action with a description of where you already are. Reopen unsupported completions.\nExecution ends at policy stop, blockage or runtime/global limits. There are no model-selected\ndistance, angle or action caps. A runtime limit does not establish completion.\n\nAt each handoff examine the returned route evidence and endpoint views. Decide\nwhether to continue, repair, inspect, update the plan or finish. Use execute_subtask for forward progress and local repairs, with an updated local instruction when needed. Use navigate_to_node to return to a visited node; no review call is required to unlock movement.\nUse observe(views=[\"front\", \"left\"]) to select current camera directions without rotation.\nUse read_memory(node_id, images=\"endpoint\", views=[\"front\"]) for historical node views.\nAvoid fetching observations already provided by the preceding tool unless necessary.\n\nUse update_memory(start_node_id, end_node_id, caption) to summarize the CURRENT execution.\nNodes are places at execution boundaries; captions describe directed experiences between\nplaces, not the places themselves. Both IDs must be the numbers printed on observe_map\nand must match its pending segment. First call observe_map after the latest movement,\nthen read it in a preceding model turn. Never batch observe_map and update_memory.\nMaps are requested explicitly; read_memory does not satisfy this read requirement.\nSummarize what was done, what changed, unfinished conditions and uncertainty. For an\nexploration describe the question and observed discoveries; for a failed attempt describe\nwhat was not achieved and the evidence; for a return explain why and where you returned.\nNot finding the target does not establish that a passage is impassable.\nA second write revises only this execution; the next movement closes it. Repeated trips\nbetween the same nodes remain separate. Update task status only through update_plan.\nUnwritten segments are explicitly marked, and movement is not gated on caption writing.\n\nobserve_map supplies bounded recent memory and history related to your current node,\nplus an index of omitted records. read_memory(node_id) retrieves incoming/outgoing history;\nread_memory(node_id, other_node_id) retrieves that direction only. Use next_offset for\nolder pages and images=\"trajectory\" when past visual evidence could change your decision.\nMemory captions are prior model assessments, not unquestionable facts. When an old branch,\nfailed approach or ambiguous location matters, consult its history before repeating it.\nThe latest map memory context supersedes earlier snapshots. Full history stays in storage.\nVLA visual history is runtime-managed using native policy sampling. Within a task it remains continuous; map memory is not appended to VLA instructions. Current execution keyframes\nare provided automatically; older images can be retrieved without carrying them every turn.\n\nA doorway visible ahead does not establish that it was crossed. Similar beds or rooms\nare not interchangeable: use ordered transitions and spatial continuity to identify\nthe right one. A map provides spatial relationships, not an oracle for room identity.\nKeep uncertainty explicit; check the evidence most useful for resolving it. Explain\nplan changes and stopping decisions briefly in observable terms.\n\nUse terminate_episode(status=\"complete\", reason=...) when you judge the original route\nfinished, or status=\"abort\" when giving up. STOP is permanent. Your declaration and\nplan checkboxes do not determine benchmark success; actual final position does.\nKeep working until this tool stops the episode. Budget: 500 low-level actions.\nNo user can answer questions during navigation.\n"
+        },
+        {
+          "role": "user",
+          "content": "Begin with observe(views=[\"front\",\"right\",\"back\",\"left\"]), then write a local plan."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-98213deb30bdb740",
+              "type": "function",
+              "function": {
+                "name": "observe",
+                "arguments": "{\"views\": [\"front\", \"right\", \"back\", \"left\"]}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-98213deb30bdb740",
+          "content": "{\"orientation\": [0.7071067690849304, -0.0, 0.7071067690849304, 0.0], \"missing_views\": []}\nahead \u2014 clearance 5.53 m\nright (+90 deg right) \u2014 clearance 0.47 m\nbehind (180 deg) \u2014 clearance 8.0 m\nleft (+90 deg left) \u2014 clearance 0.47 m"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-98213deb30bdb740: ahead \u2014 clearance 5.53 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "600adc377a42387171f0f19cbe04f46518d05eb6f46d3796b28b358ed7686be6",
+                  "mime_type": "image/png",
+                  "bytes": 57892
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-98213deb30bdb740: right (+90 deg right) \u2014 clearance 0.47 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "fb7d120dd3e1d7c35877cfc5483558951f1f09c10d4a06fa1073d89219e16d21",
+                  "mime_type": "image/png",
+                  "bytes": 25609
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-98213deb30bdb740: behind (180 deg) \u2014 clearance 8.0 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "add7db94ce66e1fcf4c6283468e312ace96d5888c4c321cbd5084925a28afa64",
+                  "mime_type": "image/png",
+                  "bytes": 58728
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Observation from tool call chatcmpl-tool-98213deb30bdb740: left (+90 deg left) \u2014 clearance 0.47 m"
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": {
+                  "artifact": "7ad2b930ba48c878c4c307b0b8b6a46cbf55f5a3d71f1a6e160194eb6baedf3b",
+                  "mime_type": "image/png",
+                  "bytes": 27381
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Current persisted task state and previously written work summary. Plan statuses and memory captions are your assessments, not verified completion. The original instruction remains the task; use observations to check these assessments:\n{\"plan\": [], \"active_task_id\": null, \"current_node_id\": 0, \"pending_segment\": {}, \"latest_memory\": null, \"map_read_valid\": false, \"memory_write_hint\": \"No finished segment to annotate.\", \"steps_remaining\": 500, \"completion_claim\": null}"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "observe",
+            "description": "Inspect selected simultaneous camera directions without moving or rotating.\n\n        Movement already returns endpoint views; request fresh views only when needed.\n        Each image identifies its direction, capture orientation and approximate clearance.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "views": {
+                  "items": {
+                    "enum": [
+                      "front",
+                      "right",
+                      "back",
+                      "left"
+                    ],
+                    "type": "string"
+                  },
+                  "title": "Views",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "views"
+              ],
+              "title": "observeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "terminate_episode",
+            "description": "Permanently STOP here. Declare complete or abort and explain the endpoint evidence.\n\n        This is your decision, independent of plan checkboxes. Evaluation measures actual\n        success separately; a completion declaration cannot make a route successful.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "abort"
+                  ],
+                  "title": "Status",
+                  "type": "string"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "title": "terminate_episodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "observe_map",
+            "description": "Inspect the observed top-down colour map, travelled path, current pose and numbered visited nodes. Unknown cells are unobserved, not free space. Path colour runs blue (start) to red (recent); the red arrow is current pose. The map keeps a fixed world orientation but its crop can change. IDs identify execution-boundary places, including revisits; captions belong to directed traversals. Returns the pending start -> end segment, recent memory and an index for read_memory. Read this map in a separate turn before update_memory. Does not move or reveal the goal.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {},
+              "title": "observe_mapArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "navigate_to_node",
+            "description": "Retrace already travelled ground to a visited node by its map ID. Node IDs remain stable. Use observe_map for node geometry and available destinations. This does not find unvisited goals.",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "navigate_to_nodeArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_plan",
+            "description": "Write or revise your plan. Each task needs id, instruction and status.\n\n        Replace the full plan, preserving IDs for retained tasks and explaining the change.\n        Each status is pending, in_progress or completed; at most one is in_progress.\n        Preserve the original route requirements when changing the approach. Statuses are\n        your assessments, not verification; a failed action is not a completed requirement.\n        Reopen incorrect completions here. This records task state; it does not execute movement.\n        ",
+            "parameters": {
+              "$defs": {
+                "PlanItem": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "title": "Id",
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "title": "Instruction",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "pending",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "title": "Status",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "instruction",
+                    "status"
+                  ],
+                  "title": "PlanItem",
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "properties": {
+                "subtasks": {
+                  "items": {
+                    "$ref": "#/$defs/PlanItem"
+                  },
+                  "title": "Subtasks",
+                  "type": "array"
+                },
+                "reason": {
+                  "title": "Reason",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "subtasks",
+                "reason"
+              ],
+              "title": "update_planArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "execute_subtask",
+            "description": "Delegate one chosen task. Optionally rewrite its remaining instruction from the current pose.\n\n        Runs until policy stop, blockage or runtime/global limits; no per-call distance or turn cap.\n        VLA stop returns control, not\n        global success: subtask_return=vla_stop means only that the policy requested a stop.\n        Visual history is runtime-managed using native policy sampling. Within a task it remains continuous; no map captions are sent to the policy.\n        Returns route evidence and endpoint views. Request observe_map separately. You choose whether to review, repair,\n        continue, replan or stop; there is no mandatory review gate.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "task_id": {
+                  "title": "Task Id",
+                  "type": "integer"
+                },
+                "instruction": {
+                  "default": "",
+                  "title": "Instruction",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task_id"
+              ],
+              "title": "execute_subtaskArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "update_memory",
+            "description": "Summarize the current execution from start_node_id to end_node_id (1-800 characters).\n\n        Both IDs are the numbers printed on observe_map, not task IDs. First call observe_map\n        AFTER the latest motion and read it in a preceding model turn; automatic maps and\n        read_memory do not grant write access. IDs must match the pending segment on that map.\n        Describe progress, discoveries, failed conditions, return reasons and uncertainty\n        supported by this segment's ordered images. Exploration and return are different\n        experiences; failure to find an object does not prove a passage is blocked.\n        Only the current segment is writable. Repeating this call revises its caption;\n        starting another movement closes it. Earlier traversals are never overwritten.\n        Geometry/evidence are system-owned. Task status belongs to update_plan.\n        Separate observed transitions from inferred identity/completion in the caption;\n        captions are model assessments and do not independently verify plan completion.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "start_node_id": {
+                  "title": "Start Node Id",
+                  "type": "integer"
+                },
+                "end_node_id": {
+                  "title": "End Node Id",
+                  "type": "integer"
+                },
+                "caption": {
+                  "title": "Caption",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "start_node_id",
+                "end_node_id",
+                "caption"
+              ],
+              "title": "update_memoryArguments",
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "function",
+          "function": {
+            "name": "read_memory",
+            "description": "Read historical experiences, never move or grant memory-write access.\n\n        node_id selects incoming/outgoing history; other_node_id restricts node_id -> other_node_id.\n        Five records newest-first; next_offset retrieves older pages. Captions are model assessments.\n        images=endpoint returns one saved snapshot (latest node visit, or newest matched segment's\n        endpoint); views selects its directions, default front. Missing directions are reported,\n        never borrowed from another visit. trajectory returns up to four ordered process frames.\n        ",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "node_id": {
+                  "title": "Node Id",
+                  "type": "integer"
+                },
+                "other_node_id": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Other Node Id"
+                },
+                "images": {
+                  "default": "none",
+                  "enum": [
+                    "none",
+                    "endpoint",
+                    "trajectory"
+                  ],
+                  "title": "Images",
+                  "type": "string"
+                },
+                "views": {
+                  "anyOf": [
+                    {
+                      "items": {
+                        "enum": [
+                          "front",
+                          "right",
+                          "back",
+                          "left"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "title": "Views"
+                },
+                "offset": {
+                  "default": 0,
+                  "title": "Offset",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "node_id"
+              ],
+              "title": "read_memoryArguments",
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "update_plan"
+        }
+      },
+      "parallel_tool_calls": false,
+      "temperature": 0,
+      "max_tokens": 2048,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    }
+  }
+]
