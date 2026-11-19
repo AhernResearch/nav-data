@@ -9,6 +9,18 @@ import argparse
 import json
 from pathlib import Path
 
+from .collection.distribution import extract_release
+from .planner_chunks.annotation import run
+from .planner_chunks.collect import collect_r2r
+from .planner_chunks.full_prepare import prepare_full
+from .planner_chunks.pool import run_pool
+from .planner_chunks.prepare import prepare, verify_manifest
+from .planner_chunks.replenish import finalize_coverage, prepare_replenishment, run_annotation_only
+from .records import read
+from .release.compact import inspect_episode
+from .release.inventory import build_inventory
+from .tasks.short_run import collect_short, prepare_short
+
 
 def _report(value):
     print(json.dumps(value, ensure_ascii=False, default=str), flush=True)
@@ -71,65 +83,35 @@ def main(argv=None):
     args = _parser().parse_args(argv)
     command = args.command
     if command == "prepare-short":
-        from .tasks.short_instructions import prepare_short
-
         _report(prepare_short(args.source_config, args.output))
     elif command == "collect-short":
-        from .tasks.short_instructions import collect_short
-
         summary = collect_short(args.root)
         _report(summary)
         _require_settled(summary)
     elif command == "prepare-r2r":
-        from .planner_chunks.prepare import prepare
-        from .records import read
-
         manifest = prepare(read(args.config), args.output)
         _report({"candidates": len(manifest["candidates"]), "owner": manifest["owner"]})
     elif command == "prepare-r2r-full":
-        from .planner_chunks.full_prepare import prepare_full
-        from .records import read
-
         _report(prepare_full(read(args.config), args.episodes, args.fg_train, args.output))
     elif command == "collect-r2r":
-        from .planner_chunks.collect import collect_r2r
-
         summary = collect_r2r(args.manifest_dir)
         _report(summary)
         _require_settled(summary)
     elif command == "replenish-r2r":
-        from .planner_chunks.replenish import prepare_replenishment
-
         _report(prepare_replenishment(args.base, args.prior, args.output)["replenishment"]["counts"])
     elif command == "annotate-r2r-replenishment":
-        from .planner_chunks.prepare import verify_manifest
-        from .planner_chunks.replenish import run_annotation_only
-
         root = args.manifest_dir.resolve()
         _report(run_annotation_only(verify_manifest(root), root / "annotation-only"))
     elif command == "finalize-r2r-replenishment":
-        from .planner_chunks.prepare import verify_manifest
-        from .planner_chunks.replenish import finalize_coverage
-
         root = args.manifest_dir.resolve()
         _report(finalize_coverage(verify_manifest(root), root))
     elif command == "planner-chunks":
-        from .planner_chunks.annotation import run
-
         run(args)
     elif command == "planner-chunk-pool":
-        from .planner_chunks.pool import run_pool
-
         _report(run_pool(args))
     elif command == "extract":
-        from .collection.distribution import extract_release
-
         _report(extract_release(args))
     elif command == "inventory":
-        from .release.inventory import build_inventory
-
         _report(build_inventory(args))
     else:
-        from .release.compact import inspect_episode
-
         _report(inspect_episode(args.inspect, full_media=args.full_media))

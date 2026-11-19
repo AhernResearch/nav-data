@@ -14,6 +14,7 @@ from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
+from nav_data.collection.client import measure_reference
 from nav_data.planner_chunks.merging import merge_short_chunks
 from nav_data.planner_chunks.prepare import (
     code_identity,
@@ -159,7 +160,6 @@ def tasks_for_episode(ep, legs, scene, config):
 
 
 def prepare_scene(scene, episodes, config, shard):
-    from nav_data.collection.client import measure_reference
     cache, tasks, candidates, audit, exclusions = {}, [], [], [], []
     for ep in episodes:
         try:

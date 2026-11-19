@@ -29,5 +29,5 @@ pythonpath = ["src"]
 line-length = 105
 
 [tool.ruff.lint]
-select = ["E4", "E9", "F", "I"]
+select = ["E4", "E9", "F", "I", "PLC0415"]
 # Imported collection code uses compact one-line statements; E7 would only reformat it.

@@ -7,6 +7,7 @@ live here. No Simulator import, GPU worker lifecycle, physics or movement retry.
 import hashlib
 import json
 import math
+import re
 import threading
 import time
 import traceback
@@ -15,8 +16,13 @@ from pathlib import Path
 from urllib import request
 from urllib.parse import urlsplit
 
+from nav_data.collection.admission import SceneAdmission
 from nav_data.collection.pool import ModelPool
-from nav_data.records import read, write
+from nav_data.records import read, write, write_text_atomic
+from nav_data.release.compact import convert_batch, read_rows
+from nav_data.tasks.instruction import annotate
+from nav_data.tasks.pointnav import outcome_record, require_train, target_record, write_frames
+from nav_data.tasks.short_instructions import propose_task
 
 TERMINAL = {
     "completed_audit",
@@ -115,7 +121,6 @@ def _task(manifest, candidate, kind, service):
     if kind == "short_instructions":
         item = candidate["case"]
         episode = item["episode"]
-        from nav_data.tasks.pointnav import require_train
 
         require_train({"backend_manifest": manifest, "collection_service": service}, item)
         extra = {}
@@ -126,7 +131,6 @@ def _task(manifest, candidate, kind, service):
                 "server collection requires the pinned sparse R2R reference representation"
             )
         yaw = task["source_start_yaw"]
-        import math
 
         scene_root = Path(manifest["runtime"]["settings"]["simulation"]["scenes_root"])
         episode = {
@@ -197,9 +201,18 @@ def _link_raw(folder, source):
             )
 
 
-def _labels(config, candidate, folder, receipt):
-    from nav_data.tasks.pointnav import save_outcome, target_record
+def save_outcome(folder, target, geometry, recording_complete, region_terminal):
+    folder = Path(folder)
+    rows = read_rows(folder)
+    outcome = outcome_record(target, rows, geometry, read(folder/'terminal.json'),
+                             recording_complete, region_terminal)
+    write(folder/'pointnav-outcome.json', outcome)
+    if recording_complete:
+        write_frames(folder/'pointnav-frames.jsonl', rows, target)
+    return outcome
 
+
+def _labels(config, candidate, folder, receipt):
     task = read(folder / "proposed-task.json")
     grounded = read(folder / "grounded-target.json")
     selected = read(folder / "selected-goal.json")
@@ -265,14 +278,12 @@ def run_remote(
     if manifest["config"].get("split") != "train":
         if kind != "short_instructions" or manifest["config"].get("split") != "development":
             raise ValueError("collection requires train inputs or explicit GS development inputs")
-        from nav_data.tasks.pointnav import require_train
 
         for candidate in manifest["candidates"]:
             require_train({"backend_manifest": manifest, "collection_service": service},
                           candidate["case"])
     candidates = manifest["candidates"]
     ids = [c["id"] for c in candidates]
-    import re
 
     if (
         not ids
@@ -282,8 +293,6 @@ def run_remote(
         raise ValueError("nonempty unique safe candidate identities required")
     admission = None
     if health.get("scene_schedule"):
-        from nav_data.collection.admission import SceneAdmission
-
         def scene_key(candidate):
             value = _task(manifest, candidate, kind, service)
             return value["dataset"], value["scene_id"], value["camera"]
@@ -342,8 +351,6 @@ def run_remote(
             write(folder / "public-observation.json", public)
             if model_call is None:
                 if kind == "short_instructions":
-                    from nav_data.tasks.short_instructions import propose_task
-
                     value = propose_task(
                         public,
                         profile,
@@ -360,8 +367,6 @@ def run_remote(
                         ),
                     )
                 else:
-                    from nav_data.tasks.instruction import annotate
-
                     value = annotate(
                         public,
                         profile,
@@ -527,15 +532,12 @@ def run_remote(
                 if status == "completed_audit" and service.get("compact_completed_episodes", False):
                     if kind != "short_instructions":
                         raise ValueError("compact episode output requires free-instruction collection")
-                    from nav_data.release.compact import convert_batch
 
                     convert_batch([(folder, shared)], workers=1)
                 results.append(result)
                 result_counts[status] += 1
                 del pending[state["request_id"]]
             if time.perf_counter() - last_progress >= 5:
-                from nav_data.records import write_text_atomic
-
                 write_text_atomic(
                     output / "progress.json",
                     json.dumps(

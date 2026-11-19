@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from nav_data.tasks import short_run as short
 from nav_data.tasks.policy import validate_distance_limits, visible_region_config
 
 
@@ -55,8 +56,6 @@ def test_invalid_distance_configuration_cannot_silently_disable_checks(minimum,m
 
 
 def test_prepare_freezes_config_and_source_without_launching(tmp_path, monkeypatch):
-    from nav_data.tasks import short_instructions as short
-
     source_path = tmp_path / 'source.json'
     source_path.write_text(json.dumps(source()))
     output = tmp_path / 'prepared'
@@ -64,7 +63,7 @@ def test_prepare_freezes_config_and_source_without_launching(tmp_path, monkeypat
     provenance = json.loads((output / 'source-provenance.json').read_text())
     assert result['cases'] == 1 and provenance['status'] == 'prepared_not_launched'
     assert provenance['model_requests'] == provenance['movement_commands'] == 0
-    assert 'src/nav_data/tasks/short_instructions.py' in provenance['source_sha256']
+    assert 'src/nav_data/tasks/short_run.py' in provenance['source_sha256']
     assert not (output / 'started.json').exists()
     with pytest.raises(ValueError, match='collection_service'):
         short.collect_short(output)
@@ -75,9 +74,6 @@ def test_prepare_freezes_config_and_source_without_launching(tmp_path, monkeypat
 
 
 def test_collect_submits_the_frozen_cases_to_the_service_only(tmp_path, monkeypatch):
-    from nav_data.collection import client
-    from nav_data.tasks import short_instructions as short
-
     scenes = tmp_path / 'scenes'
     scenes.mkdir()
     value = source()
@@ -99,7 +95,7 @@ def test_collect_submits_the_frozen_cases_to_the_service_only(tmp_path, monkeypa
         seen.update(manifest=manifest, root=root, kind=kind, service=service, options=options)
         return {'counts': {'completed_audit': 1}}
 
-    monkeypatch.setattr(client, 'run_remote', fake)
+    monkeypatch.setattr(short, 'run_remote', fake)
     assert short.collect_short(output) == {'counts': {'completed_audit': 1}}
     assert seen['kind'] == 'short_instructions' and seen['options'] == {'prepared_output': True}
     assert [c['id'] for c in seen['manifest']['candidates']] == ['old-right']

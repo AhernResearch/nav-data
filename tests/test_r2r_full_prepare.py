@@ -1,6 +1,15 @@
 import math
 
-from nav_data.planner_chunks.full_prepare import join_sources, sparse_reference, tasks_for_episode
+import pytest
+
+from nav_data.planner_chunks.full_prepare import (
+    expand_shared_viewpoints,
+    join_sources,
+    sparse_reference,
+    tasks_for_episode,
+)
+from nav_data.planner_chunks.prepare import hydrate_manifest
+from nav_data.records import digest, write
 
 
 def fixture():
@@ -37,7 +46,6 @@ def test_geometry_boundaries_and_nonmoving_chunk_merge():
 
 
 def test_expansion_uses_identical_train_viewpoints_and_keeps_lineage():
-    from nav_data.planner_chunks.full_prepare import expand_shared_viewpoints
     fg,ep=fixture();joined,_,_=join_sources(fg,[ep]);fg[0]['heading']=1.2
     extra,missing=expand_shared_viewpoints(fg,joined)
     assert len(extra)==1 and not missing
@@ -50,7 +58,6 @@ def test_expansion_uses_identical_train_viewpoints_and_keeps_lineage():
 
 
 def test_missing_fg_chunk_annotation_is_reported_not_indexed():
-    from nav_data.planner_chunks.full_prepare import expand_shared_viewpoints
     fg,ep=fixture();fg[0]['heading']=0;fg[0]['new_instructions']=fg[0]['new_instructions'][:1]
     joined,_,_=join_sources(fg,[ep])
     extra,missing=expand_shared_viewpoints(fg,joined)
@@ -60,10 +67,6 @@ def test_missing_fg_chunk_annotation_is_reported_not_indexed():
 
 
 def test_sharded_manifest_loads_only_frozen_shards(tmp_path):
-    import pytest
-
-    from nav_data.planner_chunks.prepare import hydrate_manifest
-    from nav_data.records import digest, write
     shard=tmp_path/'scene.json'
     write(shard,{'tasks':[{'id':'t'}],'candidates':[{'id':'c'}],'grouping':[]})
     m={'task_shards':[str(shard)],'task_count':1,'candidate_count':1,'source_sha256':{str(shard):digest(shard)}}

@@ -1,9 +1,11 @@
 """Data-preserving conversion, publication ordering and bounded retirement scope."""
 
+import gzip
 import hashlib
 import json
 import multiprocessing
 import os
+import sqlite3
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from contextlib import closing
 from pathlib import Path
@@ -13,10 +15,12 @@ import pytest
 from PIL import Image
 from recordings import recording
 
+from nav_data.collection.client import save_outcome
 from nav_data.records import digest, read, write
 from nav_data.release import compact as compact
+from nav_data.release.compact import read_rows
 from nav_data.release.evidence import compact_request, restore_request
-from nav_data.tasks.pointnav import read_rows, save_outcome, target_record
+from nav_data.tasks.pointnav import target_record
 from nav_data.tasks.recording import validate_recording
 from nav_data.tasks.region import build_request
 
@@ -351,9 +355,6 @@ def test_stream_spawn_commit_interruption_recovers_without_media_changes(tmp_pat
 
 
 def test_single_episode_queue_concurrent_writers_and_worker_audits(tmp_path):
-    import gzip
-    import sqlite3
-
     workers = int(os.environ.get("NAV_COMPACT_STRESS_WORKERS", "8"))
     per_run = max(8, workers)
     cases = [
@@ -413,8 +414,6 @@ def test_single_episode_queue_concurrent_writers_and_worker_audits(tmp_path):
 
 
 def test_catalog_reader_does_not_wait_for_active_worker_write(tmp_path):
-    import sqlite3
-
     client, shared, _, _ = example(tmp_path)
     compact.configure_concurrent_catalog(client.parent)
     compact.convert_episode((client, shared))

@@ -1,6 +1,7 @@
 """Training orchestration uses receipts and shared files; it never owns a Simulator."""
 
 import copy
+import json
 import threading
 from pathlib import Path
 
@@ -8,8 +9,10 @@ import pytest
 from PIL import Image
 from recordings import recording
 
-from nav_data.collection.client import CollectionHTTP, run_remote
+from nav_data.collection.admission import SceneAdmission
+from nav_data.collection.client import CollectionHTTP, _task, run_remote
 from nav_data.records import digest, read, write
+from nav_data.tasks import short_instructions as short
 
 
 @pytest.mark.parametrize("method,path,value", [
@@ -393,8 +396,6 @@ def test_rolling_scene_admission_uses_server_window_instead_of_manifest_order(
 
 
 def test_rolling_admission_rejects_partial_budget_and_service_identity_changes():
-    from nav_data.collection.admission import SceneAdmission
-
     health = {
         "service_owner": "owned",
         "status": "ok",
@@ -497,7 +498,6 @@ def test_abort_only_seals_claimed_candidates_and_leaves_reserve_without_director
 
 
 def test_degraded_service_keeps_healthy_scene_admission_and_preserves_unclaimed_failed_scene():
-    from nav_data.collection.admission import SceneAdmission
     health = {"service_owner": "owned", "status": "ok", "scene_schedule": [
         {"key": ["train", name, "camera"], "attempts": 1, "claimed": 0, "status": "active"}
         for name in ["failed", "healthy"]]}
@@ -546,7 +546,6 @@ def test_registered_gs_development_collects_without_train_relabeling(tmp_path):
 
 @pytest.mark.parametrize('change', ['backend', 'task', 'scene', 'dataset', 'split'])
 def test_gs_admission_rejects_unregistered_or_mislabeled_source(tmp_path, change):
-    from nav_data.collection.client import _task
     m = manifest(tmp_path, 'short_instructions', count=1)
     m['config']['split'] = 'development'
     simulation = m['runtime']['settings']['simulation']
@@ -570,9 +569,6 @@ def test_gs_admission_rejects_unregistered_or_mislabeled_source(tmp_path, change
 
 @pytest.mark.parametrize('mode', ['tool_call', 'json_schema'])
 def test_short_proposer_uses_explicit_response_protocol_and_preserves_raw_reply(tmp_path, monkeypatch, mode):
-    import json
-
-    from nav_data.tasks import short_instructions as short
     public = {'images': {}}
     for name in ['front', 'right', 'back', 'left']:
         path = tmp_path / (name + '.png')

@@ -5,6 +5,7 @@ import uuid
 from urllib.parse import urlsplit
 
 from nav_data.collection.pool import validate_concurrency
+from nav_data.tasks.pointnav import require_train
 
 
 def short_concurrency(config):
@@ -54,7 +55,6 @@ def visible_region_config(source):
     for key in ['prior_experiment','comparison_baselines','selection_policy']:
         config.pop(key,None)
     for item in config['cases']:
-        from nav_data.tasks.pointnav import require_train
         if 'config' in config.get('backend_manifest', {}):
             require_train(config, item)
         elif item['episode'].get('_dataset') != 'train_pilot':

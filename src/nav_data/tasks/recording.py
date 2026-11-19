@@ -3,7 +3,11 @@ import json
 import math
 from pathlib import Path
 
+import numpy as np
+from PIL import Image
+
 from nav_data.records import digest, read
+from nav_data.release.compact import Episode, open_episode
 
 
 def calibration(camera, projections, near, far, dt=.25):
@@ -43,15 +47,11 @@ def local_future(rows, anchor, horizon=10):
 
 def validate_recording(folder):
     """Post-production conversion-readiness check, not training admission."""
-    import numpy as np
-    from PIL import Image
     folder = Path(folder)
     compact = None
     if (folder/'meta.json').exists():
-        from nav_data.release.compact import Episode
         compact = Episode(folder/'meta.json')
     elif not folder.exists() and (folder.parent/'episodes.sqlite3').exists():
-        from nav_data.release.compact import open_episode
         compact = open_episode(folder.parent, folder.name)
     if compact is None:
         camera = read(folder/'camera.json')

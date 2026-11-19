@@ -240,8 +240,11 @@ Violating these is a bug, not a style choice:
 
 ```bash
 .venv/bin/python -m pytest -q
-.venv/bin/ruff check src tests ops        # line-length 105, rules E4,E9,F,I
+.venv/bin/ruff check src tests ops        # line-length 105, rules E4,E9,F,I,PLC0415
 ```
+
+All imports are at module top level (`PLC0415`); a cycle that blocks hoisting is a module
+boundary to fix, not a reason for a local import.
 
 ```
 src/nav_data/
@@ -249,7 +252,7 @@ src/nav_data/
   cli.py                  single entry point for every stage
   collection/             client.py (sim-engine client + model calls), pool.py (endpoint pool),
                           admission.py (scene window), distribution.py (row export)
-  tasks/                  region.py, instruction.py, short_instructions.py, pointnav.py,
+  tasks/                  region.py, instruction.py, short_instructions.py, short_run.py, pointnav.py,
                           recording.py, policy.py
   planner_chunks/         prepare.py, full_prepare.py, replenish.py, merging.py, collect.py,
                           annotation.py, pool.py

@@ -9,6 +9,7 @@ import json
 import math
 import re
 import time
+import traceback
 from concurrent.futures import ThreadPoolExecutor
 from itertools import pairwise
 from pathlib import Path
@@ -316,8 +317,6 @@ def extract_release(args):
         (out / "extraction-result.json").write_text(json.dumps(result, indent=2) + "\n")
         return result
     except BaseException as exc:
-        import traceback
-
         (out / "error.json").write_text(
             json.dumps(
                 {"error": repr(exc), "traceback": traceback.format_exc()}, indent=2

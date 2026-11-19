@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from nav_data.planner_chunks.collect import collect_r2r
 from nav_data.planner_chunks.prepare import perturbation, prepare, validate_config, verify_manifest
 from nav_data.records import write
 
@@ -98,8 +99,6 @@ def test_relaxed_policy_defaults_are_frozen_and_cannot_exceed_goal_region(tmp_pa
 
 
 def test_collect_requires_an_explicit_collection_service(tmp_path):
-    from nav_data.planner_chunks.collect import collect_r2r
-
     out = tmp_path / 'prepared'
     prepare(source_config(tmp_path), out)
     with pytest.raises(ValueError, match='collection_service'):

@@ -1,6 +1,7 @@
 """Read-only source preparation: merge, freeze, group by scene; never import Habitat."""
 import copy
 import hashlib
+import json
 import math
 import random
 import uuid
@@ -113,7 +114,6 @@ def prepare(config, output):
                  review / 'episodes' / str(eid) / 'chunks.json']
         hashes.update({str(p.resolve()): digest(p) for p in paths})
         ep, prepared, chunks = read(paths[0]), read(paths[2]), read(paths[3])
-        import json
         rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
         scene = (scenes_root / ep['scene_id']).resolve()
         if not scene.is_relative_to(scenes_root):

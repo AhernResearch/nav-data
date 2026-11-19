@@ -8,6 +8,8 @@ from nav_data.planner_chunks.annotation import (
     annotate,
     review_alignment,
     validate_cases,
+    validate_chunk_partition,
+    wire_request,
     write_new,
 )
 
@@ -122,7 +124,6 @@ def test_failure_keeps_attempt_evidence_without_retry(tmp_path):
 
 
 def test_json_response_profile_preserves_tasks_and_raw_response(tmp_path):
-    from nav_data.planner_chunks.annotation import wire_request
     c = fixture()
     protocol = json.loads((ROOT / 'protocol.v1.json').read_text())
     p = plan()
@@ -151,14 +152,12 @@ def test_json_response_profile_preserves_tasks_and_raw_response(tmp_path):
 
 @pytest.mark.parametrize('groups', [[[0, 1], [2]], [[0], [1, 2]], [[0, 1, 2]]])
 def test_whole_chunk_partition_accepts_adjacent_merges(groups):
-    from nav_data.planner_chunks.annotation import validate_chunk_partition
     validate_chunk_partition({'subtasks': [{'chunk_ids': ids} for ids in groups]}, ['a', 'b', 'c'])
 
 
 @pytest.mark.parametrize('groups', [[[0], [0, 1, 2]], [[0], [2]], [[1], [0, 2]],
                                     [[0, 2], [1]], [[], [0, 1, 2]], [[False, 1, 2]]])
 def test_whole_chunk_partition_rejects_overlap_gap_reorder_or_empty(groups):
-    from nav_data.planner_chunks.annotation import validate_chunk_partition
     with pytest.raises(ValueError):
         validate_chunk_partition({'subtasks': [{'chunk_ids': ids} for ids in groups]}, ['a', 'b', 'c'])
 

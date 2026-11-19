@@ -6,13 +6,9 @@ import math
 import pytest
 from recordings import recording
 
+from nav_data.collection.client import save_outcome
 from nav_data.records import digest, read, write
-from nav_data.tasks.pointnav import (
-    frame_goal,
-    outcome_record,
-    save_outcome,
-    target_record,
-)
+from nav_data.tasks.pointnav import frame_goal, outcome_record, target_record
 
 
 def inputs():

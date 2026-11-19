@@ -20,6 +20,12 @@ from contextlib import closing, nullcontext
 from functools import lru_cache, partial
 from pathlib import Path
 
+import numpy as np
+from PIL import Image
+
+from nav_data.release.evidence import compact_request, request_digest, restore_request
+from nav_data.tasks.pointnav import outcome_record
+
 _CATALOG_WRITE_LOCK = None
 
 
@@ -153,8 +159,6 @@ class Episode:
         )
 
     def model_request(self):
-        from nav_data.release.evidence import request_digest, restore_request
-
         legacy = self.data["records"]["client"].get("wire-request.json")
         if legacy is not None:
             return restore_request(legacy)
@@ -194,8 +198,6 @@ class Episode:
 
 
 def request_template(wire, public):
-    from nav_data.release.evidence import compact_request, request_digest
-
     if wire.get("encoding") != "request_with_retained_png_references":
         wire = compact_request(wire, public)
     template = copy.deepcopy(wire["request"])
@@ -231,8 +233,6 @@ def open_episode(client_root, case_id):
 
 @lru_cache(maxsize=32)
 def _load_request_templates(client_root):
-    from nav_data.release.evidence import request_digest
-
     value = read(Path(client_root) / "request-templates.json")
     if value.get("schema") != "nav_train.request_templates.v1":
         raise ValueError("unsupported request template manifest")
@@ -256,7 +256,6 @@ def save_request_templates(client_root, templates=None):
                 key: json.loads(body)
                 for key, body in db.execute("SELECT sha256,body FROM request_templates")
             }
-    from nav_data.release.evidence import request_digest
 
     if not templates or any(
         request_digest(body) != key for key, body in templates.items()
@@ -282,8 +281,6 @@ def save_request_templates(client_root, templates=None):
 
 def validate_data(data, *, media=True, full=False):
     """Verify intended goal, actual recording/labels and retained input image identities."""
-    import numpy as np
-
     raw, client = data["records"]["raw"], data["records"]["client"]
     result, receipt = client["result.json"], raw["receipt.json"]
     target, outcome = client["pointnav-target.json"], client["pointnav-outcome.json"]
@@ -325,7 +322,6 @@ def validate_data(data, *, media=True, full=False):
         > target["success_criteria"]["goal_tolerance_m"]
     ):
         raise ValueError("unsuccessful PointNav outcome")
-    from nav_data.tasks.pointnav import outcome_record
 
     if raw["geometry-result.json"]["geometry"] != result["geometry"]:
         raise ValueError("actual geometry result mismatch")
@@ -439,8 +435,6 @@ def validate_data(data, *, media=True, full=False):
             ):
                 raise ValueError("retained model input image mismatch")
         if full:
-            from PIL import Image
-
             for i, state in enumerate(states):
                 image, depth = (
                     folder / "rgb" / f"{i:05d}.jpg",
@@ -1124,3 +1118,10 @@ def inspect_episode(path, *, full_media=False):
     return validate_data(Episode(path).data, full=full_media)
 
 
+def read_rows(folder):
+    folder = Path(folder)
+    if (folder/'meta.json').exists():
+        return Episode(folder/'meta.json').data['world_states']
+    if not folder.exists() and (folder.parent/'episodes.sqlite3').exists():
+        return open_episode(folder.parent, folder.name).data['world_states']
+    return [json.loads(line) for line in (Path(folder)/'world_states.jsonl').read_text().splitlines()]

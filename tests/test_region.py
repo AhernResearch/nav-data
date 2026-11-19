@@ -1,7 +1,9 @@
+import hashlib
 import math
 
 import numpy as np
 import pytest
+from PIL import Image
 
 from nav_data.tasks.region import (
     REGION_PROMPT,
@@ -42,9 +44,6 @@ def test_floor_voxel_height_offset_allowed_without_horizontal_semantic_shift():
 
 
 def test_mainline_uses_all_views_and_robot_relative_directions_without_forcing_a_view(tmp_path):
-    import hashlib
-
-    from PIL import Image
     images={}
     for label in ['front','right','back','left']:
         p=tmp_path/(label+'.png');Image.new('RGB',(4,3)).save(p)

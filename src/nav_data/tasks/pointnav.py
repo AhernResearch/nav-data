@@ -10,8 +10,6 @@ from pathlib import Path
 
 import numpy as np
 
-from nav_data.records import read, write
-
 
 def vector(value, size):
     result = np.asarray(value, dtype=float)
@@ -130,31 +128,9 @@ def outcome_record(target, rows, geometry, terminal, recording_complete, region_
             'training_admission': 'pending_review'}
 
 
-def read_rows(folder):
-    folder = Path(folder)
-    if (folder/'meta.json').exists():
-        from nav_data.release.compact import Episode
-        return Episode(folder/'meta.json').data['world_states']
-    if not folder.exists() and (folder.parent/'episodes.sqlite3').exists():
-        from nav_data.release.compact import open_episode
-        return open_episode(folder.parent, folder.name).data['world_states']
-    return [json.loads(line) for line in (Path(folder)/'world_states.jsonl').read_text().splitlines()]
-
-
 def write_frames(path, rows, target):
     goal = target['episode']['goals'][0]['position']
     with Path(path).open('x') as stream:
         stream.writelines(json.dumps(frame_goal(row, goal), allow_nan=False) + '\n' for row in rows)
         stream.flush()
         os.fsync(stream.fileno())
-
-
-def save_outcome(folder, target, geometry, recording_complete, region_terminal):
-    folder = Path(folder)
-    rows = read_rows(folder)
-    outcome = outcome_record(target, rows, geometry, read(folder/'terminal.json'),
-                             recording_complete, region_terminal)
-    write(folder/'pointnav-outcome.json', outcome)
-    if recording_complete:
-        write_frames(folder/'pointnav-frames.jsonl', rows, target)
-    return outcome
