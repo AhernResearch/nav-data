@@ -162,7 +162,8 @@ def csv_rows(path,rows,fields):
 
 def build_inventory(args):
     result=json.loads((args.conversion_root/'result.json').read_text())
-    assert result['passed'] and result['status']=='completed' and result['total_converted']==92167
+    assert result['passed'] and result['status']=='completed'
+    assert result['total_converted']==sum(result['catalogs'].values()),'conversion result does not match its catalogs'
     args.output.mkdir(parents=True,exist_ok=False)
     source=args.output/'sources';source.mkdir()
     save(args.output/'identity.json',dict(owner=args.owner,scope='inventory_and_quality_only',training_interface='deferred_by_user'))
@@ -190,7 +191,7 @@ def build_inventory(args):
             if old['metadata_sha256']:assert old['metadata_sha256']==digest
             entries.append(dict(case_id=cid,request_id=uid,metadata=metadata,metadata_sha256=digest,frames=frames,
                 client_root=client_root,frozen_original_sha256=old['expected']))
-    assert not expected and len(entries)==len({r['request_id'] for r in entries})==92167
+    assert not expected and len(entries)==len({r['request_id'] for r in entries})==result['total_converted']
     save(args.output/'source-snapshot.json',dict(conversion=provenance,catalogs=catalogs,
         conversion_result_sha256=sha(args.conversion_root/'result.json'),target=len(entries),
         source_split='train',training_split_assignment='unassigned',media_references_only=True))
